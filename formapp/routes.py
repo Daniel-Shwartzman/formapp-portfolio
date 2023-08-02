@@ -7,7 +7,7 @@ from flask_login import (
         logout_user
 )
 from formapp.extensions import database as db
-from formapp.models import User
+from formapp.models import User, Assignment
 from formapp.forms import (
     LoginForm,
     RegisterForm,
@@ -83,8 +83,8 @@ def logout():
 
     return redirect(url_for('formapp.login'))
 
-@formapp.route('/', strict_slashes=False)
-@formapp.route('/home', strict_slashes=False)
+@formapp.route('/', strict_slashes=False, methods=['GET', 'POST'])
+@formapp.route('/home', strict_slashes=False, methods=['GET', 'POST'])
 @login_required
 def index():
     user = User.query.filter_by(id=current_user.id).first()
@@ -94,15 +94,23 @@ def index():
     if task_form.validate_on_submit():
         user_id = task_form.user.data
         task = task_form.task.data
-        user = User.query.filter_by(id=user_id).first()
-        user.task = task
-        user.save()
+        user.assign_task(user_id, task)  # Use the assign_task method from the User model
+
         flash('Task assigned successfully.', 'success')
         return redirect(url_for('formapp.index'))
-    
-    return render_template('index.html', user=user, task_form=task_form)
 
+    users = User.query.all()
+    user_tasks = {user.username: [task.task for task in user.assigned_tasks] for user in users}  # Get the tasks for each user
 
+    return render_template('index.html', user=user, task_form=task_form, users=users, user_tasks=user_tasks)
 
-
-
+@formapp.route('/delete_task', methods=['POST'])
+@login_required
+def delete_task():
+    if current_user.isOfficer:
+        task = request.form['task']
+        Assignment.delete_by_task(task)
+        flash('Task deleted successfully.', 'success')
+    else:
+        flash('You do not have permission to delete tasks.', 'danger')
+    return redirect(url_for('formapp.index'))
