@@ -335,3 +335,13 @@ a.button {
 .logo-container img {
   max-width: 200px; /* Increased logo size for better visibility */
 }
+.fade-out {
+  animation: fadeOut 0.3s forwards;
+}
+
+@keyframes fadeOut {
+  to {
+      opacity: 0;
+      display: none;
+  }
+}

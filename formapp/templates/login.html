@@ -17,7 +17,12 @@
           <div class="mb-4">
             <h2 class="card-title text-center">Login - IDF Forms</h2>
           </div>
-          {{ render_messages() }}
+          {% for message in get_flashed_messages() %}
+              <div class="alert alert-dismissible fade show" role="alert">
+                  {{ render_messages() }}
+              </div>
+          {% endfor %}
+    
           {{ form.csrf_token() }}
           <div class="mb-3">
             <div class="input-group">
@@ -47,5 +52,6 @@
       </div>
     </div>
   </div>
+  <script src="{{ url_for('static', filename='js/script.js') }}"></script>
 </main>
 {% endblock %}
