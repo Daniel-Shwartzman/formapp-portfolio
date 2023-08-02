@@ -1,0 +1,51 @@
+{% extends "base.html" %}
+{% from 'bootstrap5/utils.html' import render_messages %}
+{% from 'bootstrap5/form.html' import render_field %}
+{% block title %}Login - IDF - Forms{% endblock %}
+
+{% block body %}
+<main>
+  <div class="background"></div>
+  <div class="container">
+    <div class="center-container">
+      <div class="form">
+        <div class="logo-container">
+          <img class="w-100 me-2" src="{{ url_for('static', filename='images/logo.png') }}" alt="">
+        </div>
+        <hr> <!-- Added a horizontal line below the header -->
+        <form action="{{ url_for('formapp.login') }}" method="post">
+          <div class="mb-4">
+            <h2 class="card-title text-center">Login - IDF Forms</h2>
+          </div>
+          {{ render_messages() }}
+          {{ form.csrf_token() }}
+          <div class="mb-3">
+            <div class="input-group">
+              <span class="input-group-addon">
+                <i class="fa fa-user"></i>
+              </span>
+              {{ render_field(form.username, class="form-control", placeholder="Enter username", autofocus="true") }}
+            </div>
+          </div>
+          <div class="mb-3">
+            <div class="input-group">
+              <span class="input-group-addon">
+                <i class="fa fa-lock"></i>
+              </span>
+              {{ render_field(form.password, class="form-control", placeholder="Enter your password") }}
+            </div>
+          </div>
+          {{ render_field(form.remember) }}
+          <div class="mb-3">
+            {{ render_field(form.submit, class="button") }}
+          </div>
+        </form>
+        <hr> <!-- Added a horizontal line below the login button -->
+        <p class="text-center">Don't have an account?
+          <a href="{{ url_for('formapp.register') }}" class="text-decoration-none">Sign Up</a>
+        </p>
+      </div>
+    </div>
+  </div>
+</main>
+{% endblock %}

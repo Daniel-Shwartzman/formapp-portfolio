@@ -1,16 +1,16 @@
 from flask import url_for
 from flask_login.mixins import UserMixin
+from flask_login import LoginManager
 from werkzeug.security import(
     generate_password_hash,
     check_password_hash
 )
-from extensions import database as db
+from formapp.extensions import database as db
 
 class User(db.Model, UserMixin):
-
     __tablename__ = 'user'
 
-    id = db.Column(db.Integer(38), primary_key=True, unique=True, nullable=False)
+    id = db.Column(db.Integer, primary_key=True, autoincrement=True)
     username = db.Column(db.String(30), unique=True, nullable=False)
     password = db.Column(db.String(128), nullable=False)
     isOfficer = db.Column(db.Boolean, default=False, nullable=False)

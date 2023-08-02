@@ -4,29 +4,26 @@ from wtforms.fields import (
     PasswordField,
     SubmitField,
     BooleanField,
-    TextAreaField,
     TextAreaField
 )
+
 from wtforms.validators import (
     DataRequired,
     Length
 )
 from formapp.validators import Unique
-from models import User
+from formapp.models import User
 
 
 class LoginForm(FlaskForm):
-    username = StringField('Username', 
-        validators=[DataRequired(), Length(1, 30), Unique(User, User.username, message='Username already exists choose another.')]
-    )      
-    password = PasswordField('Password', validators=[DataRequired(), Length(4, 128)])
-    submit = SubmitField('Continue')
+    username = StringField('Username', validators=[DataRequired()])
+    password = PasswordField('Password', validators=[DataRequired()])
+    remember = BooleanField('Remember Me')
+    submit = SubmitField('Login')
 
 class RegisterForm(FlaskForm):
 
-    username = StringField('Username', 
-        validators=[DataRequired(), Length(1, 30), Unique(User, User.username, message='Username already exists choose another.')]
-    )      
+    username = StringField('Username', validators=[DataRequired(), Length(1, 30)])
     password = PasswordField('Password', validators=[DataRequired(), Length(4, 128)])
-    isOfficer = BooleanField('Officer', validators=[DataRequired()])
-    submit = SubmitField('Continue')
+    isOfficer = BooleanField('Are you an officer?')
+    submit = SubmitField('Register')

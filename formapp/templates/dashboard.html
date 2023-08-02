@@ -1,0 +1,30 @@
+{% extends "base.html" %}
+{% block title %}IDF Forms - Dashboard{% endblock %}
+
+{% block body %}
+<body onload="setDefaultTab()">
+  <div class="background"></div>
+  <div class="dashboard">
+    <div class="logo-container">
+      <img src="https://github.com/sbendarsky/hmtl-projectApp/blob/main/logo.png?raw=true" alt="Logo">
+    </div>
+    <div class="tabs">
+      <button class="tablink active" onclick="openTab('tab1')"><i class="fas fa-user"></i> About</button>
+      <button class="tablink" onclick="openTab('tab2')"><i class="fas fa-plane"></i> Flying</button>
+      <button class="tablink" onclick="openTab('tab3')"><i class="fas fa-car"></i> Driver</button>
+      {% if user.isOfficer %}
+      <button class="tablink" onclick="openTab('tab4')"><i class="fas fa-file-alt"></i> Assignings</button>
+      {% endif %}
+      <button class="tablink" onclick="openTab('tab5')"><i class="fas fa-bell"></i> Updates</button>
+      <a href="/logout" class="tablink logout-btn"><i class="fas fa-sign-out-alt"></i> Logout</a>
+    </div>
+
+    <div class="tabcontent-container">
+      {% block dashboard_content %} {% endblock dashboard_content %}{% endblock %}
+    </div>
+  </div>
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+  <script src="../static/js/scripts.js"></script>
+</body>
+</html>
