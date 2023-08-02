@@ -348,3 +348,11 @@ a.button {
       display: none;
   }
 }
+
+.tablink.logout-btn {
+  background-color: #db5050; /* Match the background color of the dashboard */
+}
+
+.tablink.logout-btn:hover{
+  background-color: #c01717; /* Lighten the hover background color */
+}
