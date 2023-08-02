@@ -1,0 +1,10 @@
+.env
+.venv
+venv/
+env/
+
+__pycache__/
+migrations/
+*.py[cod]
+*$py.class
+.pyc
