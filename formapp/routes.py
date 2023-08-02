@@ -1,4 +1,4 @@
-from flask import abort, render_template, request, redirect, url_for, flash
+from flask import abort, render_template, request, redirect, session, url_for, flash
 from flask import Blueprint
 from flask_login import (
         current_user,
@@ -76,6 +76,10 @@ def login():
 def logout():
     logout_user()
     flash("You're logout successfully.", 'success')
+
+    # Clear any existing flashed messages
+    session.pop('_flashes', None)
+
     return redirect(url_for('formapp.login'))
 
 @formapp.route('/', strict_slashes=False)
