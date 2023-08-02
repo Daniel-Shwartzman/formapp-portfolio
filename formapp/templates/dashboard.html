@@ -1,5 +1,7 @@
 {% extends "base.html" %}
 {% block title %}IDF Forms - Dashboard{% endblock %}
+{% from 'bootstrap5/form.html' import render_field %}
+{% from 'bootstrap5/utils.html' import render_messages %}
 
 {% block body %}
 <body onload="setDefaultTab()">
@@ -8,6 +10,7 @@
     <div class="logo-container">
       <img class="w-100 me-2" src="{{ url_for('static', filename='images/logo.png') }}" alt="">
     </div>
+    {{ render_messages() }}
     <hr> 
     <div class="tabs">
       <button class="tablink active" onclick="openTab('tab1')"><i class="fas fa-user"></i> About</button>
@@ -17,7 +20,8 @@
       <button class="tablink" onclick="openTab('tab4')"><i class="fas fa-file-alt"></i> Assignings</button>
       {% endif %}
       <button class="tablink" onclick="openTab('tab5')"><i class="fas fa-bell"></i> Updates</button>
-      <a href="/logout" class="tablink logout-btn"><i class="fas fa-sign-out-alt"></i> Logout</a>
+      <button class="tablink" onclick="openTab('tab6')"><i class="fas fa-network-wired"></i> Meet Us</button>
+      <a href="/logout" class="tablink logout-btn"><i class="fas fa-sign-out-alt"></i></a>
     </div> 
 
     <div class="tabcontent-container">

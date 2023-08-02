@@ -4,29 +4,33 @@
 
 
 {% block dashboard_content %}
-{{ render_messages() }}
 <div id="tab1" class="tabcontent">
-  <h2>About the project</h2>
+  <h2>IDF - Forms</h2>
+  <hr>
   <p> IDF Forms Dashboard is a web application designed to manage various forms and processes for the Israel Defense Forces (IDF). 
     It provides a user-friendly interface for handling different tasks and permissions for officers and personnel.
   </p>
   <p>
     The app was built as part of ORT Singalovski studies.
   </p>
-  <h2>Built with</h2>
-  <p> <img src="https://img.shields.io/badge/html5-%23E34F26.svg?style=for-the-badge&logo=html5&logoColor=white" alt="HTML5"> <img src="https://img.shields.io/badge/css3-%231572B6.svg?style=for-the-badge&logo=css3&logoColor=white" alt="css"> <img src="https://img.shields.io/badge/javascript-%23323330.svg?style=for-the-badge&logo=javascript&logoColor=%23F7DF1E" alt="Javascript"></p>
+<h2>Built with</h2>
+<p> <img src="https://img.shields.io/badge/html5-%23E34F26.svg?style=for-the-badge&logo=html5&logoColor=white" alt="HTML5"> <img src="https://img.shields.io/badge/css3-%231572B6.svg?style=for-the-badge&logo=css3&logoColor=white" alt="css"> <img src="https://img.shields.io/badge/javascript-%23323330.svg?style=for-the-badge&logo=javascript&logoColor=%23F7DF1E" alt="Javascript"> <img src="https://img.shields.io/badge/mysql-%2300f.svg?style=for-the-badge&logo=mysql&logoColor=white" alt="MySQL"> <img src="https://img.shields.io/badge/docker-%230db7ed.svg?style=for-the-badge&logo=docker&logoColor=white" alt="Docker"> </p>
+<p> <img src="https://img.shields.io/badge/jenkins-%232C5263.svg?style=for-the-badge&logo=jenkins&logoColor=white" alt="Jenkins"> <img src="https://img.shields.io/badge/python-3670A0?style=for-the-badge&logo=python&logoColor=ffdd54" alt="Python"> </p>
 </div>
 
 <div id="tab2" class="tabcontent">
-  <!-- Your content for tab 2 (Flying Form) goes here -->
+  <h2>Flying Form</h2>
+  <hr>
 </div>
 
 <div id="tab3" class="tabcontent">
-  <!-- Your content for tab 3 (Driver's Form) goes here -->
+  <h2>Driver Form</h2>
+  <hr>
 </div>
 
 <div id="tab4" class="tabcontent">
   <h2>Assignments</h2>
+  <hr>
   <form action="{{ url_for('formapp.index') }}" method="post" class="task-form">
     {{ task_form.csrf_token }}
     <div class="mb-3">
@@ -43,12 +47,13 @@
 
 <div id="tab5" class="tabcontent">
   <h2>Updates</h2>
+  <hr>
   {% for username, tasks in user_tasks.items() %}
     {% for task in tasks %}
       <div class="card mb-2">
         <div class="card-body">
           <div class="d-flex justify-content-between align-items-center">
-            <h5 class="card-title">{{ task }}</h5>
+            <h5 class="card-title">Task: {{ task }}</h5>
             <form action="{{ url_for('formapp.delete_task') }}" method="post">
               {{ task_form.csrf_token }}
               <input type="hidden" name="task" value="{{ task }}">
@@ -60,6 +65,40 @@
       </div>
     {% endfor %}
   {% endfor %}
+</div>
+
+<div id="tab6" class="tabcontent">
+  <h2>Meet us!</h2>
+  <hr>
+  <p class="mb-4 text-center">As DevOps Engineers, we are continuously working to improve and optimize it.</p>
+  <div class="integration-list row justify-content-center py-5">
+    <div class="item col-4 col-md-3 col-lg-2 mb-3 mb-lg-5 top-line-lg text-center">
+      <a href="https://www.linkedin.com/in/stav-bendarsky/" target="_blank">
+        <img class="shadow rounded-circle" src="https://media.licdn.com/dms/image/D4D03AQEh8hNjDDtOJA/profile-displayphoto-shrink_200_200/0/1689615852246?e=1696464000&v=beta&t=QU5vyDz3glCqkSOftRQfENDgGYNn9WYApJ2FO6PE6xE" alt="Stav Bendarsky">
+      </a>
+      <h6 class="mt-3">Stav Bendarsky</h6>
+      <p class="mb-0">DevOps Engineer</p>
+      <div class="github-link">
+        <a href="https://github.com/sbendarsky" class="github-icon" target="_blank">
+          <i class="fab fa-github"></i>
+        </a>
+        <a href="https://github.com/sbendarsky" target="_blank"></a>
+      </div>
+    </div>
+    <div class="item col-4 col-md-3 col-lg-2 mb-3 mb-lg-5 top-line-lg text-center">
+      <a href="https://www.linkedin.com/in/daniel-shwartzman/" target="_blank">
+        <img class="shadow rounded-circle" src="https://media.licdn.com/dms/image/D4E03AQHW2rB27uFBBQ/profile-displayphoto-shrink_200_200/0/1689177010875?e=1696464000&v=beta&t=v1NXP7jCTv0AWw4H2uoPkB4LZPc4R2CRPbZLNmu71Y4" alt="Daniel Shwartzman">
+      </a>
+      <h6 class="mt-3">Daniel Shwartzman</h6>
+      <p class="mb-0">DevOps Engineer</p>
+      <div class="github-link">
+        <a href="https://github.com/Daniel-Shwartzman" class="github-icon" target="_blank">
+          <i class="fab fa-github"></i>
+        </a>
+        <a href="https://github.com/Daniel-Shwartzman" target="_blank"></a>
+      </div>
+    </div>
+  </div>
 </div>
 
 
