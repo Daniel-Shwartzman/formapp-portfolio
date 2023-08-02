@@ -1,4 +1,6 @@
 {% extends "dashboard.html" %}
+{% from 'bootstrap5/form.html' import render_field %}
+
 
 {% block dashboard_content %}
 <div id="tab1" class="tabcontent">
@@ -22,7 +24,19 @@
 </div>
 
 <div id="tab4" class="tabcontent">
-  <!-- Your content for tab 4 (Assignments) goes here -->
+  <h2>Assignments</h2>
+  <form action="{{ url_for('formapp.index') }}" method="post" class="task-form">
+    {{ task_form.csrf_token }}
+    <div class="mb-3">
+      {{ render_field(task_form.user, class="form-select", placeholder="Select User") }}
+    </div>
+    <div class="mb-3">
+      {{ render_field(task_form.task, class="form-control", placeholder="Enter Task", rows="4") }}
+    </div>
+    <div class="mb-3">
+      {{ render_field(task_form.submit, class="button") }}
+    </div>
+  </form>
 </div>
 
 <div id="tab5" class="tabcontent">

@@ -38,3 +38,13 @@ class User(db.Model, UserMixin):
 
     def __repr__(self):
         return '<User> {}'.format(self.username)
+    
+class Assignment(db.Model):
+    __tablename__ = 'assignment'
+
+    id = db.Column(db.Integer, primary_key=True, autoincrement=True)
+    username = db.Column(db.String(30), nullable=False)
+    task = db.Column(db.String(100), nullable=False)
+
+    def __repr__(self):
+        return f'<Assignment> (ID: {self.id}, Username: {self.username}, Task: {self.task})'

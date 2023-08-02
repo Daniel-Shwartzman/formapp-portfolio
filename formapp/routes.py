@@ -10,7 +10,8 @@ from formapp.extensions import database as db
 from formapp.models import User
 from formapp.forms import (
     LoginForm,
-    RegisterForm
+    RegisterForm,
+    AssignTaskForm
 )
 from datetime import datetime, timedelta
 from sqlalchemy.exc import IntegrityError
@@ -87,7 +88,21 @@ def logout():
 @login_required
 def index():
     user = User.query.filter_by(id=current_user.id).first()
-    return render_template('index.html', user=user)
+    task_form = AssignTaskForm()
+    task_form.user.choices = [(user.id, user.username) for user in User.query.all() if user.id != current_user.id]
+
+    if task_form.validate_on_submit():
+        user_id = task_form.user.data
+        task = task_form.task.data
+        user = User.query.filter_by(id=user_id).first()
+        user.task = task
+        user.save()
+        flash('Task assigned successfully.', 'success')
+        return redirect(url_for('formapp.index'))
+    
+    return render_template('index.html', user=user, task_form=task_form)
+
+
 
 
 
