@@ -13,6 +13,7 @@ from formapp.forms import (
     RegisterForm
 )
 from datetime import datetime, timedelta
+from sqlalchemy.exc import IntegrityError
 import re
 import os
 
@@ -21,12 +22,14 @@ formapp = Blueprint('formapp', __name__, template_folder='templates')
 @formapp.route('/register', methods=['GET', 'POST'], strict_slashes=False)
 def register():
     form = RegisterForm()
+
     if current_user.is_authenticated:
         return redirect(url_for('formapp.index'))
+
     if form.validate_on_submit():
-        username = form.username.data('username')
-        password = form.password.data('password')
-        isOfficer = form.isOfficer.data('isOfficer')
+        username = form.username.data
+        password = form.password.data
+        isOfficer = form.isOfficer.data
 
         try:
             user = User(
@@ -38,9 +41,12 @@ def register():
             user.save()
             flash('You are now registered.')
             return redirect(url_for('formapp.login'))
+        except IntegrityError:
+            db.session.rollback()
+            flash('Username is already taken. Please choose a different one.', 'error')
         except Exception as e:
-            flash('Error: {}'.format(e))
-            return redirect(url_for('formapp.register'))
+            db.session.rollback()
+            flash('Error: {}'.format(e), 'error')
     return render_template('register.html', form=form)
 
 @formapp.route('/login', methods=['GET', 'POST'], strict_slashes=False)
@@ -50,8 +56,8 @@ def login():
     if current_user.is_authenticated:
         return redirect(url_for('formapp.index'))
     if form.validate_on_submit():
-        username = form.username.data('username')
-        password = form.password.data('password')
+        username = form.username.data
+        password = form.password.data
 
         user = User.query.filter_by(username=username).first()
         if not user:
@@ -70,13 +76,14 @@ def login():
 def logout():
     logout_user()
     flash("You're logout successfully.", 'success')
-    return redirect(url_for('accounts.login'))
+    return redirect(url_for('formapp.login'))
 
 @formapp.route('/', strict_slashes=False)
 @formapp.route('/home', strict_slashes=False)
 @login_required
 def index():
-    return render_template('index.html')
+    user = User.query.filter_by(id=current_user.id).first()
+    return render_template('index.html', user=user)
 
 
 

@@ -8,3 +8,7 @@ migrations/
 *.py[cod]
 *$py.class
 .pyc
+
+instance/
+database.db
+```
