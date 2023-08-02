@@ -5,7 +5,7 @@ from dotenv import load_dotenv
 
 BASE_DIR = Path(__file__).resolve().parent.parent
 
-MEDIA_ROOT = os.path.join(BASE_DIR, 'formapp', 'static', 'media')
+MEDIA_ROOT = os.path.join(BASE_DIR, 'formapp', 'static', 'images')
 
 load_dotenv(os.path.join(BASE_DIR, '.env'))
 
