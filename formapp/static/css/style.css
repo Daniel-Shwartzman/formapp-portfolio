@@ -191,6 +191,7 @@ a.button {
   border-top-right-radius: 8px;
 }
 
+
 .tablink {
   flex: 1;
   border: none;
@@ -317,13 +318,15 @@ a.button {
 }
 
 .dashboard {
-  max-width: 800px;
-  margin: 30px auto;
-  background-color: #f9f9f9; /* Changed background color to a light gray */
-  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-  position: relative;
-  border-radius: 8px; /* Add border-radius for a slightly rounded appearance */
-  overflow: hidden; /* Hide any content that might overflow */
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  max-width: 725px; /* You can adjust the max-width to your desired value */
+  width: 100%;
+  padding: 20px;
+  background-color: rgba(255, 255, 255, 0.8); /* Add a transparent background */
+  border-radius: 10px;
 }
 
 .logo-container {
