@@ -12,7 +12,7 @@ from wtforms.validators import (
     Length
 )
 from formapp.validators import Unique
-from models import User
+from formapp.models import User
 
 
 class LoginForm(FlaskForm):

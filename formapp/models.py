@@ -4,7 +4,7 @@ from werkzeug.security import(
     generate_password_hash,
     check_password_hash
 )
-from extensions import database as db
+from formapp.extensions import database as db
 
 class User(db.Model, UserMixin):
 
