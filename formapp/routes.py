@@ -94,13 +94,13 @@ def index():
     if task_form.validate_on_submit():
         user_id = task_form.user.data
         task = task_form.task.data
-        user.assign_task(user_id, task)  # Use the assign_task method from the User model
+        user.assign_task(user_id, task)
 
         flash('Task assigned successfully.', 'success')
         return redirect(url_for('formapp.index'))
 
     users = User.query.all()
-    user_tasks = {user.username: [task.task for task in user.assigned_tasks] for user in users}  # Get the tasks for each user
+    user_tasks = {user.username: [assignment.task for assignment in user.assignments] for user in users}
 
     return render_template('index.html', user=user, task_form=task_form, users=users, user_tasks=user_tasks)
 
