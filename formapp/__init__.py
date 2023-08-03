@@ -44,14 +44,12 @@ def config_blueprint(app):
 
 def config_extensions(app):
     from formapp.extensions import database 
-    # from formapp.extensions import migrate
     from formapp.extensions import login_manager
     from formapp.extensions import csrf
     from formapp.extensions import bootstrap
 
     login_manager.init_app(app)
     database.init_app(app)
-    # migrate.init_app(app, db=database)
     csrf.init_app(app)
     bootstrap.init_app(app)
     config_manager(login_manager)
