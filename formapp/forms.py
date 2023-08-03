@@ -6,7 +6,8 @@ from wtforms.fields import (
     BooleanField,
     TextAreaField,
     SelectField,
-    HiddenField
+    HiddenField,
+    DateField
 )
 
 from wtforms.validators import (
@@ -29,7 +30,15 @@ class RegisterForm(FlaskForm):
     password = PasswordField('Password', validators=[DataRequired(), Length(4, 128)])
     isOfficer = BooleanField('Are you an officer?')
     submit = SubmitField('Register')
+
 class AssignTaskForm(FlaskForm):
     user = SelectField('Select User', validators=[DataRequired()])
     task = TextAreaField('Task', validators=[DataRequired(), Length(1, 100)])
     submit = SubmitField('Assign Task')
+
+class FlyingForm(FlaskForm):
+    full_name = StringField('Full Name', validators=[DataRequired(), Length(max=30)])
+    start_date = DateField('Start Date', validators=[DataRequired()])
+    end_date = DateField('End Date', validators=[DataRequired()])
+    location = StringField('Location', validators=[DataRequired(), Length(max=30)])
+    submit = SubmitField('Submit')

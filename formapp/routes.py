@@ -11,9 +11,11 @@ from formapp.models import User, Assignment
 from formapp.forms import (
     LoginForm,
     RegisterForm,
-    AssignTaskForm
+    AssignTaskForm,
+    FlyingForm
 )
 from datetime import datetime, timedelta
+from formapp.models import User, Assignment, Flying
 from sqlalchemy.exc import IntegrityError
 import re
 import os
@@ -89,7 +91,31 @@ def logout():
 def index():
     user = User.query.filter_by(id=current_user.id).first()
     task_form = AssignTaskForm()
+    flying_form = FlyingForm()
     task_form.user.choices = [(user.id, user.username) for user in User.query.all() if user.id != current_user.id]
+
+    if flying_form.validate_on_submit():
+        full_name = flying_form.full_name.data
+        start_date = flying_form.start_date.data
+        end_date = flying_form.end_date.data
+        location = flying_form.destination.data
+
+        if start_date > end_date:
+            flash('Start date must be before end date.', 'danger')
+            return redirect(url_for('formapp.index'))
+        
+        if start_date < datetime.now():
+            flash('Start date must be in the future.', 'danger')
+            return redirect(url_for('formapp.index'))
+        
+        if end_date < datetime.now():
+            flash('End date must be in the future.', 'danger')
+            return redirect(url_for('formapp.index'))
+        
+
+        flash('Flying Form submited successfully.', 'success')
+        return redirect(url_for('formapp.index'))
+
 
     if task_form.validate_on_submit():
         user_id = task_form.user.data
@@ -102,7 +128,37 @@ def index():
     users = User.query.all()
     user_tasks = {user.username: [assignment.task for assignment in user.assignments] for user in users}
 
-    return render_template('index.html', user=user, task_form=task_form, users=users, user_tasks=user_tasks)
+
+    return render_template('index.html', user=user, task_form=task_form, users=users, user_tasks=user_tasks, flying_form=flying_form)
+
+
+
+@formapp.route('/flying_form_submit', methods=['POST'])
+@login_required
+def submit_flying_form():
+    flying_form = FlyingForm(request.form)
+
+    if flying_form.validate_on_submit():
+        # Process the form data and save it to the database
+        full_name = flying_form.full_name.data
+        start_date = flying_form.start_date.data
+        end_date = flying_form.end_date.data
+        location = flying_form.location.data
+
+        # Save the data to the Flying table in the database
+        flying_entry = Flying(full_name=full_name, start_date=start_date, end_date=end_date, location=location)
+        db.session.add(flying_entry)
+        db.session.commit()
+
+        flash('Flying Form submitted successfully.', 'success')
+    else:
+        # Handle form validation errors
+        flash('There were errors in the form. Please check your input.', 'danger')
+
+    return redirect(url_for('formapp.index'))
+
+
+
 
 @formapp.route('/delete_task', methods=['POST'])
 @login_required
