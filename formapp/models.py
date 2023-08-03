@@ -65,6 +65,20 @@ class Assignment(db.Model):
     def __repr__(self):
         return f'<Assignment> (ID: {self.id}, User ID: {self.user_id}, Task: {self.task})'
 
+    
+class Flying(db.Model):
+    __tablename__ = 'flying'
+
+    id = db.Column(db.Integer, primary_key=True, autoincrement=True)
+    full_name = db.Column(db.String(30), nullable=False)
+    start_date = db.Column(db.String(30), nullable=False)
+    end_date = db.Column(db.String(30), nullable=False)
+    location = db.Column(db.String(30), nullable=False)
+
+    def __repr__(self):
+        return f'<Flying> (ID: {self.id}, Full Name: {self.full_name}, Start Date: {self.start_date}, End Date: {self.end_date}, Location: {self.location})'
+
+
 class Driving(db.Model):
     __tablename__ = 'driving'
 
@@ -104,3 +118,4 @@ class Driving(db.Model):
 
     def __repr__(self):
         return f'<Driving> (ID: {self.id}, Full Name: {self.full_name}, Destination: {self.destination}, Commanding Officer: {self.commanding_officer})'
+
