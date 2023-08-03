@@ -3,6 +3,7 @@ from flask import Flask
 from pathlib import Path
 from dotenv import load_dotenv
 
+
 BASE_DIR = Path(__file__).resolve().parent.parent
 
 MEDIA_ROOT = os.path.join(BASE_DIR, 'formapp', 'static', 'images')
@@ -20,6 +21,10 @@ def create_app():
     config_blueprint(app)
     # config error handler.
     config_errorhandler(app)
+    # create database tables
+    with app.app_context():
+        from formapp.extensions import database
+        database.create_all()
 
     return app
 
@@ -30,7 +35,7 @@ def config_application(app):
     app.config["SECRET_KEY"] = os.urandom(12)
     
     # SQLAlchemy configuration
-    app.config["SQLALCHEMY_DATABASE_URI"] = 'sqlite:///database.db' # later change to mysql
+    app.config["SQLALCHEMY_DATABASE_URI"] = 'mysql+mysqlconnector://root:root@mysql/db'
     app.config["SQLALCHEMY_TRACK_MODIFICATIONS"] = False
 
 def config_blueprint(app):
@@ -38,15 +43,15 @@ def config_blueprint(app):
     app.register_blueprint(formapp)
 
 def config_extensions(app):
-    from formapp.extensions import database
-    from formapp.extensions import migrate
+    from formapp.extensions import database 
+    # from formapp.extensions import migrate
     from formapp.extensions import login_manager
     from formapp.extensions import csrf
     from formapp.extensions import bootstrap
 
     login_manager.init_app(app)
     database.init_app(app)
-    migrate.init_app(app, db=database)
+    # migrate.init_app(app, db=database)
     csrf.init_app(app)
     bootstrap.init_app(app)
     config_manager(login_manager)
