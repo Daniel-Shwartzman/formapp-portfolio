@@ -21,31 +21,27 @@
 <div id="tab2" class="tabcontent">
   <h2 class="text-center mb-4">Flying Form</h2>
   <hr>
-  <form action="{{ url_for('formapp.submit_flying_form') }}" method="post">
+  <form action="{{ url_for('formapp.index') }}" method="post">
     {{ flying_form.hidden_tag() }}
     <div class="row mb-3">
       <div class="col-md-6">
-        {{ flying_form.full_name.label }}
-        {{ flying_form.full_name(class="form-control", placeholder="Full Name") }}
+        {{ render_field(flying_form.full_name, class="form-control", placeholder="Enter Full Name") }}
       </div>
       <div class="col-md-6">
-        {{ flying_form.start_date.label }}
-        {{ flying_form.start_date(class="form-control", placeholder="Start Date") }}
+        {{ render_field(flying_form.start_date, class="form-control", placeholder="Start Date") }}
       </div>
     </div>
     <div class="row mb-3">
       <div class="col-md-6">
-        {{ flying_form.end_date.label }}
-        {{ flying_form.end_date(class="form-control", placeholder="End Date") }}
+        {{ render_field(flying_form.end_date, class="form-control", placeholder="End Date") }}
       </div>
       <div class="col-md-6">
-        {{ flying_form.location.label }}
-        {{ flying_form.location(class="form-control", placeholder="Location") }}
+        {{ render_field(flying_form.location, class="form-control", placeholder="Location") }}
       </div>
     </div>
     <div class="row mb-3">
       <div class="col">
-        {{ flying_form.submit(class="btn btn-primary btn-block") }} <!-- Use Bootstrap primary button class -->
+        {{ render_field(flying_form.submit, class="button") }}
       </div>
     </div>
   </form>
@@ -104,6 +100,7 @@
 <div id="tab5" class="tabcontent">
   <h2>Updates</h2>
   <hr>
+  <div class="scrollable-updates">
   {% for username, tasks in user_tasks.items() %}
     {% for task in tasks %}
       <div class="card mb-2">
@@ -123,7 +120,47 @@
       </div>
     {% endfor %}
   {% endfor %}
-  
+
+{% for flying_entry in flying_entries %}
+  <div class="card mb-3 {% if flying_entry.isConfirmed %}border-success{% else %}border-danger{% endif %}">
+    <div class="card-header">
+      <div class="w-100 d-flex justify-content-between align-items-center">
+        <div>
+          <h5 class="card-title mb-0 mt-2">Flying Form: {{ flying_entry.full_name }}</h5>
+        </div>
+        <div class="btn-group">
+          {% if current_user.isOfficer %}
+            <form action="{{ url_for('formapp.confirm_flying', flying_id=flying_entry.id) }}" method="post">
+              {{ flying_form.csrf_token }}
+              <input type="hidden" name="flying_id" value="{{ flying_entry.id }}">
+              <button type="submit" class="btn btn-success btn-sm {% if flying_entry.isConfirmed %}disabled{% endif %}">Confirm</button>
+            </form>
+            <form action="{{ url_for('formapp.not_confirm_flying', flying_id=flying_entry.id) }}" method="post" class="ms-1">
+              {{ flying_form.csrf_token }}
+              <input type="hidden" name="flying_id" value="{{ flying_entry.id }}">
+              <button type="submit" class="btn btn-danger btn-sm {% if not flying_entry.isConfirmed %}disabled{% endif %}">Deny</button>
+            </form>
+            <form action="{{ url_for('formapp.delete_flying', flying_id=flying_entry.id) }}" method="post" class="ms-1">
+              {{ flying_form.csrf_token }}
+              <input type="hidden" name="flying_id" value="{{ flying_entry.id }}">
+              <button type="submit" class="btn btn-secondary btn-sm">Delete</button>
+            </form>
+          {% endif %}
+        </div>
+      </div>
+    </div>
+    <div class="card-body">
+      <p class="card-text">Start Date: {{ flying_entry.start_date }}</p>
+      <p class="card-text">End Date: {{ flying_entry.end_date }}</p>
+      <p class="card-text">Location: {{ flying_entry.location }}</p>
+    </div>
+    <div class="card-footer text-center">
+      <!-- No need for buttons in this section -->
+    </div>
+  </div>
+{% endfor %}
+
+
   {% for drive in drives %}
     <div class="card mb-3 {% if drive.isConfirmed %}border-success{% elif not drive.isConfirmed %}border-danger{% endif %}">
       <div class="card-header">
@@ -163,6 +200,7 @@
     </div>
   {% endfor %}
 </div>
+</div>
 
 
 <div id="tab6" class="tabcontent">
@@ -196,6 +234,7 @@
         <a href="https://github.com/Daniel-Shwartzman" target="_blank"></a>
       </div>
     </div>
+  </div>
   </div>
 </div>
 

@@ -95,32 +95,22 @@ def index():
     flying_form = FlyingForm()
     task_form.user.choices = [(user.id, user.username) for user in User.query.all() if user.id != current_user.id]
 
-    if flying_form.validate_on_submit():
-        full_name = flying_form.full_name.data
-        start_date = flying_form.start_date.data
-        end_date = flying_form.end_date.data
-        location = flying_form.destination.data
-
-        if start_date > end_date:
-            flash('Start date must be before end date.', 'danger')
-            return redirect(url_for('formapp.index'))
-        
-        if start_date < datetime.now():
-            flash('Start date must be in the future.', 'danger')
-            return redirect(url_for('formapp.index'))
-        
-        if end_date < datetime.now():
-            flash('End date must be in the future.', 'danger')
-            return redirect(url_for('formapp.index'))
-        
-
-        flash('Flying Form submited successfully.', 'success')
-        return redirect(url_for('formapp.index'))
-
     officer_choices = [(officer.id, officer.username) for officer in User.get_officers()]
     driver_form = DriverForm()
     driver_form.commanding_officer.choices = officer_choices
     
+    if flying_form.validate_on_submit():
+        full_name = flying_form.full_name.data
+        start_date = flying_form.start_date.data
+        end_date = flying_form.end_date.data
+        location = flying_form.location.data
+
+        # Create a new Flying record
+        Flying.create_flying(full_name, start_date, end_date, location)
+
+        flash('Flying information submitted successfully.', 'success')
+        return redirect(url_for('formapp.index'))
+        
     if driver_form.validate_on_submit():
         full_name = driver_form.full_name.data
         destination = driver_form.destination.data
@@ -132,7 +122,6 @@ def index():
         flash('Driver information submitted successfully.', 'success')
         return redirect(url_for('formapp.index'))
         
-
     if task_form.validate_on_submit():
         user_id = task_form.user.data
         task = task_form.task.data
@@ -143,11 +132,13 @@ def index():
     users = User.query.all()
     user_tasks = {user.username: [assignment.task for assignment in user.assignments] for user in users}
     
+    # Fetch flying records
+    flying_entries = Flying.query.all()
+    
     # Fetch driving records
     drives = Driving.query.all()
 
-    return render_template('index.html', user=user, task_form=task_form, driver_form=driver_form, users=users, user_tasks=user_tasks, drives=drives, flying_form=flying_form)
-
+    return render_template('index.html', user=user, task_form=task_form, driver_form=driver_form, users=users, user_tasks=user_tasks, drives=drives, flying_form=flying_form, flying_entries=flying_entries)
 @formapp.route('/confirm_drive/<int:drive_id>', methods=['POST'])
 @login_required
 def confirm_drive(drive_id):
@@ -161,36 +152,6 @@ def confirm_drive(drive_id):
             flash('Drive not found.', 'danger')
     else:
         flash('You do not have permission to confirm drives.', 'danger')
-    return redirect(url_for('formapp.index'))
-
-
-
-    return render_template('index.html', user=user, task_form=task_form, users=users, user_tasks=user_tasks, flying_form=flying_form)
-
-
-
-@formapp.route('/flying_form_submit', methods=['POST'])
-@login_required
-def submit_flying_form():
-    flying_form = FlyingForm(request.form)
-
-    if flying_form.validate_on_submit():
-        # Process the form data and save it to the database
-        full_name = flying_form.full_name.data
-        start_date = flying_form.start_date.data
-        end_date = flying_form.end_date.data
-        location = flying_form.location.data
-
-        # Save the data to the Flying table in the database
-        flying_entry = Flying(full_name=full_name, start_date=start_date, end_date=end_date, location=location)
-        db.session.add(flying_entry)
-        db.session.commit()
-
-        flash('Flying Form submitted successfully.', 'success')
-    else:
-        # Handle form validation errors
-        flash('There were errors in the form. Please check your input.', 'danger')
-
     return redirect(url_for('formapp.index'))
 
 
@@ -234,3 +195,50 @@ def delete_task():
     else:
         flash('You do not have permission to delete tasks.', 'danger')
     return redirect(url_for('formapp.index'))
+
+@formapp.route('/confirm_flying/<int:flying_id>', methods=['POST'])
+@login_required
+def confirm_flying(flying_id):
+    if current_user.isOfficer:
+        fly = Flying.query.get(flying_id)
+        if fly:
+            fly.isConfirmed = True
+            db.session.commit()
+            flash('Flying record confirmed successfully.', 'success')
+        else:
+            flash('Flying record not found.', 'danger')
+    else:
+        flash('You do not have permission to confirm flying records.', 'danger')
+    return redirect(url_for('formapp.index'))
+
+@formapp.route('/not_confirm_flying/<int:flying_id>', methods=['POST'])
+@login_required
+def not_confirm_flying(flying_id):
+    if current_user.isOfficer:
+        fly = Flying.query.get(flying_id)
+        if fly:
+            fly.isConfirmed = False
+            db.session.commit()
+            flash('Flying record status updated successfully.', 'success')
+        else:
+            flash('Flying record not found.', 'danger')
+    else:
+        flash('You do not have permission to update flying record status.', 'danger')
+    return redirect(url_for('formapp.index'))
+
+@formapp.route('/delete_flying/<int:flying_id>', methods=['POST'])
+@login_required
+def delete_flying(flying_id):
+    # delete the specific flying record
+    if current_user.isOfficer:
+        fly = Flying.query.get(flying_id)
+        if fly:
+            db.session.delete(fly)
+            db.session.commit()
+            flash('Flying record deleted successfully.', 'success')
+        else:
+            flash('Flying record not found.', 'danger')
+    else:
+        flash('You do not have permission to delete flying records.', 'danger')
+    return redirect(url_for('formapp.index'))
+

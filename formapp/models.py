@@ -74,6 +74,45 @@ class Flying(db.Model):
     start_date = db.Column(db.String(30), nullable=False)
     end_date = db.Column(db.String(30), nullable=False)
     location = db.Column(db.String(30), nullable=False)
+    isConfirmed = db.Column(db.Boolean, default=False, nullable=False)
+
+
+    @classmethod
+    def confirm(cls, id):
+        flying = cls.query.get(id)
+        if flying:
+            # Update the confirmation status and commit changes
+            flying.isConfirmed = True
+            db.session.commit()
+            return True
+        return False
+    
+    @classmethod
+    def create_flying(cls, full_name, start_date, end_date, location):
+        flying = cls(full_name=full_name, start_date=start_date, end_date=end_date, location=location)
+        db.session.add(flying)
+        db.session.commit()
+
+
+    @classmethod
+    def not_confirm(cls, id):
+        flying = cls.query.get(id)
+        if flying:
+            # Update the confirmation status and commit changes
+            flying.isConfirmed = False
+            db.session.commit()
+            return True
+        return False
+
+    @classmethod
+    def delete(cls, id):
+        flying = cls.query.get(id)
+        if flying:
+            # Delete the flying record and commit changes
+            db.session.delete(flying)
+            db.session.commit()
+            return True
+        return False
 
     def __repr__(self):
         return f'<Flying> (ID: {self.id}, Full Name: {self.full_name}, Start Date: {self.start_date}, End Date: {self.end_date}, Location: {self.location})'

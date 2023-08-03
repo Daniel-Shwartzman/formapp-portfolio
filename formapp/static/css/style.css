@@ -380,3 +380,18 @@ a.button {
     padding: 2rem;
   }
 }
+
+/* Add this to your CSS file */
+.scrollable-updates {
+  max-height: 400px; /* Adjust the height as needed */
+  overflow-y: auto;
+  padding-right: 10px; /* Add right padding to prevent content from overlapping scrollbar */
+}
+
+/* Style for individual flying cards */
+.card {
+  margin-bottom: 10px;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  border: 1px solid rgba(0, 0, 0, 0.125);
+  border-radius: 0.25rem;
+}
