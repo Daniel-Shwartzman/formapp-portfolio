@@ -146,7 +146,7 @@ def index():
     # Fetch driving records
     drives = Driving.query.all()
 
-    return render_template('index.html', user=user, task_form=task_form, driver_form=driver_form, users=users, user_tasks=user_tasks, drives=drives)
+    return render_template('index.html', user=user, task_form=task_form, driver_form=driver_form, users=users, user_tasks=user_tasks, drives=drives, flying_form=flying_form)
 
 @formapp.route('/confirm_drive/<int:drive_id>', methods=['POST'])
 @login_required
