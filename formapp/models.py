@@ -34,6 +34,10 @@ class User(db.Model, UserMixin):
         db.session.commit()
 
     @classmethod
+    def get_officers(cls):
+        return cls.query.filter_by(isOfficer=True).all()
+    
+    @classmethod
     def get_officer(cls):
         return cls.query.filter_by(isOfficer=True).first()
 
@@ -60,3 +64,43 @@ class Assignment(db.Model):
 
     def __repr__(self):
         return f'<Assignment> (ID: {self.id}, User ID: {self.user_id}, Task: {self.task})'
+
+class Driving(db.Model):
+    __tablename__ = 'driving'
+
+    id = db.Column(db.Integer, primary_key=True, autoincrement=True)
+    full_name = db.Column(db.String(30), nullable=False)
+    destination = db.Column(db.String(30), nullable=False)
+    commanding_officer = db.Column(db.String(30), nullable=False)
+    isConfirmed = db.Column(db.Boolean, default=False, nullable=False)
+
+    @classmethod
+    def confirm(cls, id):
+        driving = cls.query.filter_by(id=id).first()
+        if driving:
+            driving.isConfirmed = True
+            db.session.commit()
+            return True
+        return False
+    
+    @classmethod
+    def create_driver(cls, full_name, destination, commanding_officer):
+        driving = cls(full_name=full_name, destination=destination, commanding_officer=commanding_officer)
+        db.session.add(driving)
+        db.session.commit()
+
+    @classmethod
+    def get_all(cls):
+        return cls.query.all()
+    
+    @classmethod
+    def delete_by_driver(cls, full_name):
+        driving = cls.query.filter_by(full_name=full_name).first()
+        if driving:
+            db.session.delete(driving)
+            db.session.commit()
+            return True
+        return False
+
+    def __repr__(self):
+        return f'<Driving> (ID: {self.id}, Full Name: {self.full_name}, Destination: {self.destination}, Commanding Officer: {self.commanding_officer})'
