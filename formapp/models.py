@@ -11,7 +11,7 @@ class User(db.Model, UserMixin):
     isOfficer = db.Column(db.Boolean, default=False, nullable=False)
 
     # Remove the cascade option from the assigned_tasks relationship
-    assigned_tasks = db.relationship('Assignment', backref='user', lazy=True)
+    assignments = db.relationship('Assignment', back_populates='assigned_user', viewonly=True)
 
     @classmethod
     def assign_task(cls, user_id, task):
@@ -47,7 +47,7 @@ class Assignment(db.Model):
     user_id = db.Column(db.Integer, db.ForeignKey('user.id'))
     task = db.Column(db.String(100), nullable=False)
 
-    assigned_user = db.relationship('User', backref='assignments', lazy=True)
+    assigned_user = db.relationship('User', back_populates='assignments', viewonly=True)
 
     @classmethod
     def delete_by_task(cls, task):

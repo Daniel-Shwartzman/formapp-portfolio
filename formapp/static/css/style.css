@@ -123,6 +123,7 @@ p {
   color: #333;
 }
 
+
 /* Styling for links */
 a {
   color: #0090b4;
@@ -185,6 +186,8 @@ a.button {
 /* Tabs styles */
 .tabs {
   display: flex;
+  overflow: hidden;
+  size: 50px;
   background-color: #f1f1f1; /* Lighten the background color of tabs */
   border-bottom: 1px solid #ddd; /* Add a subtle border at the bottom of tabs */
   border-top-left-radius: 8px; /* Match the dashboard's border radius */
@@ -221,6 +224,9 @@ a.button {
 
 .tabcontent {
   display: none;
+  max-height: 100%;
+  max-height: 400px; 
+  overflow: hidden;
 }
 
 .tabcontent h2 {
@@ -315,4 +321,62 @@ a.button {
 
 .tablink.logout-btn:hover{
   background-color: #c01717; /* Lighten the hover background color */
+}
+
+#tab6 .shadow.rounded-circle {
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  border-radius: 50%;
+  transition: box-shadow 0.3s ease;
+}
+
+/* Add the hover effect for images in the "Meet us!" tab */
+#tab6 .shadow.rounded-circle:hover {
+  box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
+}
+
+.connector {
+  border-right: 2px solid #ccc;
+  height: 100px; /* Adjust the height as needed */
+  margin-top: 30px; /* Adjust the margin as needed */
+}
+
+.error-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  height: 100vh;
+  background-color: #f8f9fa;
+}
+
+.error-container h1 {
+  font-size: 3rem;
+  margin-bottom: 1rem;
+}
+
+.error-container p {
+  font-size: 1.2rem;
+  text-align: center;
+  margin-bottom: 1.5rem;
+}
+
+.error-container a {
+  display: inline-block;
+  padding: 0.5rem 1.5rem;
+  background-color: #007bff;
+  color: #fff;
+  text-decoration: none;
+  border-radius: 5px;
+  font-size: 1.2rem;
+  transition: background-color 0.3s ease;
+}
+
+.error-container a:hover {
+  background-color: #0056b3;
+}
+
+@media (max-width: 768px) {
+  .error-container {
+    padding: 2rem;
+  }
 }

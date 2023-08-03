@@ -1,0 +1,13 @@
+{% extends "base.html" %}
+{% block title %}IDF Forms - Error{% endblock %}
+
+{% block body %}
+<body>
+  <div class="error-container">
+    <h1>Error</h1>
+    <p>Oops! Something went wrong.</p>
+    <p>Please try again later or contact the support team.</p>
+    <a href="{{ url_for('formapp.index') }}" class="btn btn-primary">Go to Dashboard</a>
+  </div>
+</body>
+{% endblock %}
