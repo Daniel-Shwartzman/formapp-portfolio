@@ -7,11 +7,12 @@ from flask_login import (
         logout_user
 )
 from formapp.extensions import database as db
-from formapp.models import User, Assignment
+from formapp.models import User, Assignment, Driving
 from formapp.forms import (
     LoginForm,
     RegisterForm,
-    AssignTaskForm
+    AssignTaskForm,
+    DriverForm
 )
 from datetime import datetime, timedelta
 from sqlalchemy.exc import IntegrityError
@@ -91,19 +92,80 @@ def index():
     task_form = AssignTaskForm()
     task_form.user.choices = [(user.id, user.username) for user in User.query.all() if user.id != current_user.id]
 
+    officer_choices = [(officer.id, officer.username) for officer in User.get_officers()]
+    driver_form = DriverForm()
+    driver_form.commanding_officer.choices = officer_choices
+    
+    if driver_form.validate_on_submit():
+        full_name = driver_form.full_name.data
+        destination = driver_form.destination.data
+        commanding_officer = driver_form.commanding_officer.data
+        
+        # Create a new Driving record
+        Driving.create_driver(full_name, destination, commanding_officer)
+        
+        flash('Driver information submitted successfully.', 'success')
+        return redirect(url_for('formapp.index'))
+        
     if task_form.validate_on_submit():
         user_id = task_form.user.data
         task = task_form.task.data
         user.assign_task(user_id, task)
-
         flash('Task assigned successfully.', 'success')
         return redirect(url_for('formapp.index'))
 
     users = User.query.all()
     user_tasks = {user.username: [assignment.task for assignment in user.assignments] for user in users}
+    
+    # Fetch driving records
+    drives = Driving.query.all()
 
-    return render_template('index.html', user=user, task_form=task_form, users=users, user_tasks=user_tasks)
+    return render_template('index.html', user=user, task_form=task_form, driver_form=driver_form, users=users, user_tasks=user_tasks, drives=drives)
 
+@formapp.route('/confirm_drive/<int:drive_id>', methods=['POST'])
+@login_required
+def confirm_drive(drive_id):
+    if current_user.isOfficer:
+        drive = Driving.query.get(drive_id)
+        if drive:
+            drive.isConfirmed = True
+            db.session.commit()
+            flash('Drive confirmed successfully.', 'success')
+        else:
+            flash('Drive not found.', 'danger')
+    else:
+        flash('You do not have permission to confirm drives.', 'danger')
+    return redirect(url_for('formapp.index'))
+
+@formapp.route('/not_confirm_drive/<int:drive_id>', methods=['POST'])
+@login_required
+def not_confirm_drive(drive_id):
+    if current_user.isOfficer:
+        drive = Driving.query.get(drive_id)
+        if drive:
+            drive.isConfirmed = False
+            db.session.commit()
+            flash('Drive status updated successfully.', 'success')
+        else:
+            flash('Drive not found.', 'danger')
+    else:
+        flash('You do not have permission to update drive status.', 'danger')
+    return redirect(url_for('formapp.index'))
+
+@formapp.route('/delete_drive/<int:drive_id>', methods=['POST'])
+@login_required
+def delete_drive(drive_id):
+    if current_user.isOfficer:
+        drive = Driving.query.get(drive_id)
+        if drive:
+            db.session.delete(drive)
+            db.session.commit()
+            flash('Drive deleted successfully.', 'success')
+        else:
+            flash('Drive not found.', 'danger')
+    else:
+        flash('You do not have permission to delete drives.', 'danger')
+    return redirect(url_for('formapp.index'))
 @formapp.route('/delete_task', methods=['POST'])
 @login_required
 def delete_task():

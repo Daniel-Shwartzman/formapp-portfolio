@@ -29,7 +29,14 @@ class RegisterForm(FlaskForm):
     password = PasswordField('Password', validators=[DataRequired(), Length(4, 128)])
     isOfficer = BooleanField('Are you an officer?')
     submit = SubmitField('Register')
+
 class AssignTaskForm(FlaskForm):
     user = SelectField('Select User', validators=[DataRequired()])
     task = TextAreaField('Task', validators=[DataRequired(), Length(1, 100)])
     submit = SubmitField('Assign Task')
+
+class DriverForm(FlaskForm):
+    full_name = StringField('Full Name', validators=[DataRequired(), Length(1, 30)])
+    destination = StringField('Destination', validators=[DataRequired(), Length(1, 30)])
+    commanding_officer = SelectField('Commanding Officer', validators=[DataRequired()])
+    submit = SubmitField('Submit')
