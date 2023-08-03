@@ -61,6 +61,27 @@
 <div id="tab3" class="tabcontent">
   <h2>Driver Form</h2>
   <hr>
+  <form action="{{ url_for('formapp.index') }}" method="post" class="driver-form">
+    {{ driver_form.csrf_token }}
+    <div class="row">
+      <div class="col-md-6 mb-3">
+        {{ render_field(driver_form.full_name, class="form-control", placeholder="Enter Full Name") }}
+      </div>
+      <div class="col-md-6 mb-3">
+        {{ render_field(driver_form.destination, class="form-control", placeholder="Enter Destination") }}
+      </div>
+    </div>
+    <div class="row">
+      <div class="col-md-12 mb-3">
+        {{ render_field(driver_form.commanding_officer, class="form-select", placeholder="Select Commanding Officer") }}
+      </div>
+    </div>
+    <div class="row">
+      <div class="col-md-12 mb-3">
+        {{ render_field(driver_form.submit, class="button") }}
+      </div>
+    </div>
+  </form>
 </div>
 
 <div id="tab4" class="tabcontent">
@@ -88,19 +109,61 @@
       <div class="card mb-2">
         <div class="card-body">
           <div class="d-flex justify-content-between align-items-center">
-            <h5 class="card-title">Task: {{ task }}</h5>
+            <div>
+              <h5 class="card-title">Task Form: {{ task }}</h5>
+              <p class="card-text">Assigned to: {{ username }}</p>
+            </div>
             <form action="{{ url_for('formapp.delete_task') }}" method="post">
               {{ task_form.csrf_token }}
               <input type="hidden" name="task" value="{{ task }}">
               <input type="submit" value="Delete Task" class="btn btn-danger btn-sm">
             </form>
           </div>
-          <p class="card-text">Assigned to: {{ username }}</p>
         </div>
       </div>
     {% endfor %}
   {% endfor %}
+  
+  {% for drive in drives %}
+    <div class="card mb-3 {% if drive.isConfirmed %}border-success{% elif not drive.isConfirmed %}border-danger{% endif %}">
+      <div class="card-header">
+        <div class="w-100 d-flex justify-content-between align-items-center">
+          <div>
+          <h5 class="card-title mb-0 mt-2">Driver Form: {{ drive.full_name }}</h5>
+        </div>
+          <div class="btn-group">
+            {% if current_user.isOfficer %}
+              <form action="{{ url_for('formapp.confirm_drive', drive_id=drive.id) }}" method="post">
+                {{ driver_form.csrf_token }}
+                <input type="hidden" name="drive_id" value="{{ drive.id }}">
+                <button type="submit" class="btn btn-success btn-sm {% if drive.isConfirmed %}disabled{% endif %}">Confirm</button>
+              </form>
+              <form action="{{ url_for('formapp.not_confirm_drive', drive_id=drive.id) }}" method="post" class="ms-1">
+                {{ driver_form.csrf_token }}
+                <input type="hidden" name="drive_id" value="{{ drive.id }}">
+                <button type="submit" class="btn btn-danger btn-sm {% if not drive.isConfirmed %}disabled{% endif %}">Deny</button>
+              </form>
+              <form action="{{ url_for('formapp.delete_drive', drive_id=drive.id) }}" method="post" class="ms-1">
+                {{ driver_form.csrf_token }}
+                <input type="hidden" name="drive_id" value="{{ drive.id }}">
+                <button type="submit" class="btn btn-secondary btn-sm">Delete Drive</button>
+              </form>
+            {% endif %}
+          </div>
+        </div>
+      </div>
+      <div class="card-body">
+        <p class="card-text">Destination: {{ drive.destination }}</p>
+      </div>
+      <div class="card-footer {% if drive.isConfirmed %}bg-success{% elif not drive.isConfirmed %}bg-danger{% endif %} text-center">
+        <div class="d-flex justify-content-center">
+          <!-- Button forms here -->
+        </div>
+      </div>
+    </div>
+  {% endfor %}
 </div>
+
 
 <div id="tab6" class="tabcontent">
   <h2>Meet us!</h2>

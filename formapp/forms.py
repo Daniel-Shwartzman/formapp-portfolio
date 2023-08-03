@@ -36,9 +36,16 @@ class AssignTaskForm(FlaskForm):
     task = TextAreaField('Task', validators=[DataRequired(), Length(1, 100)])
     submit = SubmitField('Assign Task')
 
+
 class FlyingForm(FlaskForm):
     full_name = StringField('Full Name', validators=[DataRequired(), Length(max=30)])
     start_date = DateField('Start Date', validators=[DataRequired()])
     end_date = DateField('End Date', validators=[DataRequired()])
     location = StringField('Location', validators=[DataRequired(), Length(max=30)])
+    submit = SubmitField('Submit')
+
+class DriverForm(FlaskForm):
+    full_name = StringField('Full Name', validators=[DataRequired(), Length(1, 30)])
+    destination = StringField('Destination', validators=[DataRequired(), Length(1, 30)])
+    commanding_officer = SelectField('Commanding Officer', validators=[DataRequired()])
     submit = SubmitField('Submit')
