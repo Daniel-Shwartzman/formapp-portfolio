@@ -12,7 +12,8 @@ from wtforms.fields import (
 
 from wtforms.validators import (
     DataRequired,
-    Length
+    Length,
+    EqualTo
 )
 from formapp.validators import Unique
 from formapp.models import User
@@ -23,6 +24,12 @@ class LoginForm(FlaskForm):
     password = PasswordField('Password', validators=[DataRequired()])
     remember = BooleanField('Remember Me')
     submit = SubmitField('Login')
+
+class PasswordForm(FlaskForm):
+    old_password = PasswordField('Old Password', validators=[DataRequired()])
+    new_password = PasswordField('New Password', validators=[DataRequired(), Length(4, 128)])
+    confirm_password = PasswordField('Confirm New Password', validators=[DataRequired(), EqualTo('new_password')])
+    submit = SubmitField('Change Password')
 
 class RegisterForm(FlaskForm):
 
