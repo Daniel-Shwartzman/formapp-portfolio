@@ -13,7 +13,8 @@ from formapp.forms import (
     RegisterForm,
     AssignTaskForm,
     FlyingForm,
-    DriverForm
+    DriverForm,
+    PasswordForm
 )
 from datetime import datetime, timedelta
 from formapp.models import User, Assignment, Flying
@@ -242,3 +243,17 @@ def delete_flying(flying_id):
         flash('You do not have permission to delete flying records.', 'danger')
     return redirect(url_for('formapp.index'))
 
+@formapp.route('/settings', methods=['GET', 'POST'])
+@login_required
+def settings():
+    form = PasswordForm()
+
+    if form.validate_on_submit():
+        if current_user.check_password(form.old_password.data):
+            current_user.set_password(form.new_password.data)
+            db.session.commit()
+            flash('Password updated successfully.', 'success')
+            return redirect(url_for('formapp.index'))
+        else:
+            flash('Old password is incorrect.', 'danger')
+    return render_template('settings.html', form=form)
