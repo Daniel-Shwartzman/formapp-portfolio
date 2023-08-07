@@ -1,11 +1,11 @@
-FROM python:3.8
+FROM python:slim
 
 # Set the working directory
 WORKDIR /app
 
 # Install system dependencies (including pkg-config)
 RUN apt-get update && \
-    apt-get install -y pkg-config libmariadb-dev-compat
+    apt-get install -y pkg-config python3-dev default-libmysqlclient-dev build-essential
 
 # Copy the requirements file
 COPY requirements.txt .
