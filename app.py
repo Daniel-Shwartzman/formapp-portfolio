@@ -1,4 +1,4 @@
-from formapp.app import create_app
+from formapp import create_app
 
 app = create_app()
 

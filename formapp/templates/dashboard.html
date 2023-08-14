@@ -14,14 +14,14 @@
     <a href="/settings" class="static-settings-btn"><i class="fas fa-cog"></i></a> <!-- Static settings cog icon in the top right corner -->
     <hr> 
     <div class="tabs">
-      <button class="tablink active" onclick="openTab('tab1')"><i class="fas fa-user"></i> About</button>
-      <button class="tablink" onclick="openTab('tab2')"><i class="fas fa-plane"></i> Flying</button>
-      <button class="tablink" onclick="openTab('tab3')"><i class="fas fa-car"></i> Driver</button>
+      <button class="tablink active" data-tab="tab1"><i class="fas fa-user"></i> About</button>
+      <button class="tablink" data-tab="tab2"><i class="fas fa-plane"></i> Flying</button>
+      <button class="tablink" data-tab="tab3"><i class="fas fa-car"></i> Driver</button>
       {% if user.isOfficer %}
-      <button class="tablink" onclick="openTab('tab4')"><i class="fas fa-file-alt"></i> Assignings</button>
+      <button class="tablink" data-tab="tab4"><i class="fas fa-file-alt"></i> Tasks</button>
       {% endif %}
-      <button class="tablink" onclick="openTab('tab5')"><i class="fas fa-bell"></i> Updates</button>
-      <button class="tablink" onclick="openTab('tab6')"><i class="fas fa-network-wired"></i> Meet Us</button>
+      <button class="tablink" data-tab="tab5"><i class="fas fa-bell"></i> Updates</button>
+      <button class="tablink" data-tab="tab6"><i class="fas fa-network-wired"></i> Meet Us</button>
       <a href="/logout" class="tablink logout-btn"><i class="fas fa-sign-out-alt"></i></a>
     </div> 
 

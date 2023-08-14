@@ -2,6 +2,8 @@ import os
 from flask import Flask
 from pathlib import Path
 from dotenv import load_dotenv
+from formapp.extensions import database as db
+from flask_wtf import CSRFProtect
 
 
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -10,11 +12,23 @@ MEDIA_ROOT = os.path.join(BASE_DIR, 'formapp', 'static', 'images')
 
 load_dotenv(os.path.join(BASE_DIR, '.env'))
 
-def create_app():
+def create_app(testing=False):
     app = Flask(__name__, template_folder='templates')
 
-    # application configuration.
-    config_application(app)
+    # Application configuration
+    app.config["DEBUG"] = True
+    app.config["TESTING"] = testing
+    app.config["SECRET_KEY"] = os.urandom(12)
+    
+    if testing:
+        # Disable CSRF protection during testing
+        app.config["WTF_CSRF_ENABLED"] = False
+        app.config["SQLALCHEMY_DATABASE_URI"] = "sqlite:///:memory:"
+    else:
+        app.config["SQLALCHEMY_DATABASE_URI"] = 'mysql+mysqlconnector://root:root@mysql/db'
+        
+    app.config["SQLALCHEMY_TRACK_MODIFICATIONS"] = False
+    app.config["SQLALCHEMY_TRACK_MODIFICATIONS"] = False
     # config application extension. 
     config_extensions(app)
     # register account blueprint.
@@ -28,16 +42,6 @@ def create_app():
 
     return app
 
-def config_application(app):
-    # Application configuration
-    app.config["DEBUG"] = True
-    app.config["TESTING"] = True
-    app.config["SECRET_KEY"] = os.urandom(12)
-    
-    # SQLAlchemy configuration
-    app.config["SQLALCHEMY_DATABASE_URI"] = 'mysql+mysqlconnector://root:root@mysql/db'
-    app.config["SQLALCHEMY_TRACK_MODIFICATIONS"] = False
-
 def config_blueprint(app):
     from formapp.routes import formapp
     app.register_blueprint(formapp)
@@ -45,14 +49,15 @@ def config_blueprint(app):
 def config_extensions(app):
     from formapp.extensions import database 
     from formapp.extensions import login_manager
-    from formapp.extensions import csrf
     from formapp.extensions import bootstrap
+    from formapp.extensions import csrf  # Import the csrf extension
 
     login_manager.init_app(app)
     database.init_app(app)
-    csrf.init_app(app)
     bootstrap.init_app(app)
+    csrf.init_app(app)  # Initialize the csrf extension
     config_manager(login_manager)
+
 
 def config_manager(manager):
     """
