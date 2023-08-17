@@ -2,7 +2,7 @@
 init-hook='import sys; sys.path.append(".")'
 
 [MESSAGES CONTROL]
-disable=C0114,C0115,C0116,E0401
+disable=C0114,C0115,C0116,E0401,C0103,R0914,W0718,C0411
 
 [FORMAT]
 max-line-length=120
