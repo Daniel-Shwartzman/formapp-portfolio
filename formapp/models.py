@@ -20,7 +20,7 @@ class User(db.Model, UserMixin):
         db.session.commit()  # Commit the session to save the assignment
 
 
-    def get_user_by_username(cls, username):
+    def get_user_by_username(self, cls, username):
         return cls.query.filter_by(username=username).first()
 
     def set_password(self, password):
@@ -50,7 +50,6 @@ class Assignment(db.Model):
     id = db.Column(db.Integer, primary_key=True, autoincrement=True)
     user_id = db.Column(db.Integer, db.ForeignKey('user.id'))
     task = db.Column(db.String(100), nullable=False)
-
     assigned_user = db.relationship('User', back_populates='assignments', viewonly=True)
 
     @classmethod
@@ -65,7 +64,6 @@ class Assignment(db.Model):
     def __repr__(self):
         return f'<Assignment> (ID: {self.id}, User ID: {self.user_id}, Task: {self.task})'
 
-    
 class Flying(db.Model):
     __tablename__ = 'flying'
 
@@ -75,7 +73,6 @@ class Flying(db.Model):
     end_date = db.Column(db.String(30), nullable=False)
     location = db.Column(db.String(30), nullable=False)
     isConfirmed = db.Column(db.Boolean, default=False, nullable=False)
-
 
     @classmethod
     def confirm(cls, id):
@@ -92,7 +89,6 @@ class Flying(db.Model):
         flying = cls(full_name=full_name, start_date=start_date, end_date=end_date, location=location)
         db.session.add(flying)
         db.session.commit()
-
 
     @classmethod
     def not_confirm(cls, id):
@@ -115,8 +111,11 @@ class Flying(db.Model):
         return False
 
     def __repr__(self):
-        return f'<Flying> (ID: {self.id}, Full Name: {self.full_name}, Start Date: {self.start_date}, End Date: {self.end_date}, Location: {self.location})'
-
+        return (
+    f'<Flying> (ID: {self.id}, Full Name: {self.full_name}, '
+    f'Start Date: {self.start_date}, End Date: {self.end_date}, '
+    f'Location: {self.location})'
+)
 
 class Driving(db.Model):
     __tablename__ = 'driving'
@@ -156,5 +155,8 @@ class Driving(db.Model):
         return False
 
     def __repr__(self):
-        return f'<Driving> (ID: {self.id}, Full Name: {self.full_name}, Destination: {self.destination}, Commanding Officer: {self.commanding_officer})'
+        return (
+    f'<Driving> (ID: {self.id}, Full Name: {self.full_name}, '
+    f'Destination: {self.destination}, Commanding Officer: {self.commanding_officer})'
+)
 
