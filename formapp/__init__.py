@@ -1,16 +1,14 @@
 import os
-from flask import Flask
 from pathlib import Path
 from dotenv import load_dotenv
-from formapp.extensions import database as db
-from flask_wtf import CSRFProtect
+from flask import Flask
+from formapp.extensions import database
 
+base_dir = Path(__file__).resolve().parent.parent
 
-BASE_DIR = Path(__file__).resolve().parent.parent
+media_root = os.path.join(base_dir, 'formapp', 'static', 'images')
 
-MEDIA_ROOT = os.path.join(BASE_DIR, 'formapp', 'static', 'images')
-
-load_dotenv(os.path.join(BASE_DIR, '.env'))
+load_dotenv(os.path.join(base_dir, '.env'))
 
 def create_app(testing=False):
     app = Flask(__name__, template_folder='templates')
@@ -19,17 +17,17 @@ def create_app(testing=False):
     app.config["DEBUG"] = True
     app.config["TESTING"] = testing
     app.config["SECRET_KEY"] = os.urandom(12)
-    
+
     if testing:
         # Disable CSRF protection during testing
         app.config["WTF_CSRF_ENABLED"] = False
         app.config["SQLALCHEMY_DATABASE_URI"] = "sqlite:///test.db"
     else:
         app.config["SQLALCHEMY_DATABASE_URI"] = 'mysql+mysqlconnector://root:root@mysql/db'
-        
+
     app.config["SQLALCHEMY_TRACK_MODIFICATIONS"] = False
     app.config["SQLALCHEMY_TRACK_MODIFICATIONS"] = False
-    # config application extension. 
+    # config application extension.
     config_extensions(app)
     # register account blueprint.
     config_blueprint(app)
@@ -37,17 +35,18 @@ def create_app(testing=False):
     config_errorhandler(app)
     # create database tables
     with app.app_context():
-        from formapp.extensions import database
         database.create_all()
 
     return app
+
 
 def config_blueprint(app):
     from formapp.routes import formapp
     app.register_blueprint(formapp)
 
+
 def config_extensions(app):
-    from formapp.extensions import database 
+    from formapp.extensions import database
     from formapp.extensions import login_manager
     from formapp.extensions import bootstrap
     from formapp.extensions import csrf  # Import the csrf extension
@@ -71,11 +70,10 @@ def config_manager(manager):
 
     @manager.user_loader
     def load_user(user):
-     return User.query.get(int(user))
+        return User.query.get(int(user))
 
 
-
-def config_errorhandler(app): #update according to your needs
+def config_errorhandler(app):
     """
     Configure error handlers for application.
     """
@@ -85,25 +83,25 @@ def config_errorhandler(app): #update according to your needs
     from flask import flash
 
     @app.errorhandler(400)
-    def bad_request(e):
+    def bad_request(e):  # noqa: C0103, W0613
         flash("Something went wrong.", 'error')
         return redirect(url_for('formapp.index'))
-    
+
     @app.errorhandler(401)
-    def unauthorized(e):
+    def unauthorized(e):  # noqa: C0103, W0613
         flash("You are not authorized to perform this action.", 'error')
         return redirect(url_for('formapp.index'))
-    
+
     @app.errorhandler(404)
-    def page_not_found(e):
+    def page_not_found(e):  # noqa: C0103, W0613
         return render_template('error.html'), 404
 
     @app.errorhandler(405)
-    def method_not_allowed(e):
+    def method_not_allowed(e):  # noqa: C0103, W0613
         flash("Method not allowed.", 'error')
         return redirect(url_for('formapp.index'))
 
     @app.errorhandler(500)
-    def database_error(e):
+    def database_error(e):  # noqa: C0103, W0613
         flash("Internal server error.", 'error')
         return redirect(url_for('formapp.index'))

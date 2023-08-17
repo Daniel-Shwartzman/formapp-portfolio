@@ -1,13 +1,10 @@
-import pytest
-from formapp import create_app, db
-from formapp.models import User
-from formapp.forms import RegisterForm, LoginForm
+from formapp.forms import LoginForm
 
 def test_register_route(client):
     response = client.get('/register')
     assert response.status_code == 200
 
-def test_login_route(client, registered_user):  # Pass the registered_user fixture
+def test_login_route(client):  # Pass the registered_user fixture
     response = client.get('/login')
     assert response.status_code == 200
 
