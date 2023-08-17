@@ -46,7 +46,6 @@ def config_blueprint(app):
 
 
 def config_extensions(app):
-    from formapp.extensions import database
     from formapp.extensions import login_manager
     from formapp.extensions import bootstrap
     from formapp.extensions import csrf  # Import the csrf extension

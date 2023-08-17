@@ -159,4 +159,3 @@ class Driving(db.Model):
     f'<Driving> (ID: {self.id}, Full Name: {self.full_name}, '
     f'Destination: {self.destination}, Commanding Officer: {self.commanding_officer})'
 )
-
