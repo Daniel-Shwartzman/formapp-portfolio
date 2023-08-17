@@ -1,11 +1,10 @@
-import pytest
 from formapp.models import Flying, Driving, Assignment
 from formapp.forms import FlyingForm, DriverForm, AssignTaskForm
 
-
-def test_submit_flying_form(client, registered_user):
+def test_submit_flying_form(client):
     # Login as the registered user
-    login_response = client.post('/login', data={'username': 'testuser', 'password': 'testpassword'}, follow_redirects=True)
+    login_response = client.post(
+        '/login', data={'username': 'testuser', 'password': 'testpassword'}, follow_redirects=True)
     assert login_response.status_code == 200
 
     # Create a FlyingForm instance and fill in the data
@@ -32,9 +31,10 @@ def test_submit_flying_form(client, registered_user):
     assert form_response.status_code == 200
     assert b'John Doe' in form_response.data
 
-def test_submit_driver_form(client, registered_user, officer_user):
+def test_submit_driver_form(client, officer_user):
     # Login as the registered user
-    login_response = client.post('/login', data={'username': 'testuser', 'password': 'testpassword'}, follow_redirects=True)
+    login_response = client.post(
+        '/login', data={'username': 'testuser', 'password': 'testpassword'}, follow_redirects=True)
     assert login_response.status_code == 200
 
     # Create a DriverForm instance and fill in the data
@@ -59,9 +59,9 @@ def test_submit_driver_form(client, registered_user, officer_user):
     assert form_response.status_code == 200
     assert b'Jane Smith' in form_response.data
 
-
-def test_assignments(client, registered_user, officer_user):
-    login_response = client.post('/login', data={'username': 'officer', 'password': 'officerpassword'}, follow_redirects=True)
+def test_assignments(client, registered_user):
+    login_response = client.post(
+    '/login', data={'username': 'officer', 'password': 'officerpassword'}, follow_redirects=True)
     assert login_response.status_code == 200 
     form =  AssignTaskForm()
     form.user.data = registered_user.id

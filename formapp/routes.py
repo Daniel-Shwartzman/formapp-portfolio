@@ -1,13 +1,28 @@
-from flask import abort, render_template, request, redirect, session, url_for, flash
+from flask import (
+    render_template,
+    request,
+    redirect,
+    session,
+    url_for,
+    flash
+)
 from flask import Blueprint
 from flask_login import (
-        current_user,
-        login_required,
-        login_user,
-        logout_user
+    current_user,
+    login_required,
+    login_user,
+    logout_user
 )
+from sqlalchemy.exc import IntegrityError  # Third-party import
+from datetime import timedelta  # Standard library import
+
 from formapp.extensions import database as db
-from formapp.models import User, Assignment, Driving
+from formapp.models import (
+    User,
+    Assignment,
+    Driving,
+    Flying
+)
 from formapp.forms import (
     LoginForm,
     RegisterForm,
@@ -16,11 +31,6 @@ from formapp.forms import (
     DriverForm,
     PasswordForm
 )
-from datetime import datetime, timedelta
-from formapp.models import User, Assignment, Flying
-from sqlalchemy.exc import IntegrityError
-import re
-import os
 
 formapp = Blueprint('formapp', __name__, template_folder='templates')
 
@@ -51,7 +61,8 @@ def register():
             flash('Username is already taken. Please choose a different one.', 'error')
         except Exception as e:
             db.session.rollback()
-            flash('Error: {}'.format(e), 'error')
+            error_message = f"An error occurred: {e}"
+            flash(error_message, 'error')
     return render_template('register.html', form=form)
 
 @formapp.route('/login', methods=['GET', 'POST'], strict_slashes=False)
@@ -99,7 +110,6 @@ def index():
     officer_choices = [(officer.id, officer.username) for officer in User.get_officers()]
     driver_form = DriverForm()
     driver_form.commanding_officer.choices = officer_choices
-    
     if flying_form.validate_on_submit():
         full_name = flying_form.full_name.data
         start_date = flying_form.start_date.data
@@ -111,18 +121,14 @@ def index():
 
         flash('Flying information submitted successfully.', 'success')
         return redirect(url_for('formapp.index'))
-        
     if driver_form.validate_on_submit():
         full_name = driver_form.full_name.data
         destination = driver_form.destination.data
         commanding_officer = driver_form.commanding_officer.data
-        
         # Create a new Driving record
         Driving.create_driver(full_name, destination, commanding_officer)
-        
         flash('Driver information submitted successfully.', 'success')
         return redirect(url_for('formapp.index'))
-        
     if task_form.validate_on_submit():
         user_id = task_form.user.data
         task = task_form.task.data
@@ -132,14 +138,15 @@ def index():
 
     users = User.query.all()
     user_tasks = {user.username: [assignment.task for assignment in user.assignments] for user in users}
-    
     # Fetch flying records
     flying_entries = Flying.query.all()
-    
     # Fetch driving records
     drives = Driving.query.all()
-
-    return render_template('index.html', user=user, task_form=task_form, driver_form=driver_form, users=users, user_tasks=user_tasks, drives=drives, flying_form=flying_form, flying_entries=flying_entries)
+    return render_template('index.html', user=user, task_form=task_form,
+                        driver_form=driver_form, users=users,
+                        user_tasks=user_tasks, drives=drives,
+                        flying_form=flying_form,
+                        flying_entries=flying_entries)
 @formapp.route('/confirm_drive/<int:drive_id>', methods=['POST'])
 @login_required
 def confirm_drive(drive_id):
@@ -254,6 +261,7 @@ def settings():
             db.session.commit()
             flash('Password updated successfully.', 'success')
             return redirect(url_for('formapp.index'))
-        else:
-            flash('Old password is incorrect.', 'danger')
+
+        flash('Old password is incorrect.', 'danger')
+
     return render_template('settings.html', form=form)

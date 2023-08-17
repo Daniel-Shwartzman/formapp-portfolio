@@ -6,7 +6,6 @@ from wtforms.fields import (
     BooleanField,
     TextAreaField,
     SelectField,
-    HiddenField,
     DateField
 )
 
@@ -15,8 +14,6 @@ from wtforms.validators import (
     Length,
     EqualTo
 )
-from formapp.validators import Unique
-from formapp.models import User
 
 
 class LoginForm(FlaskForm):
