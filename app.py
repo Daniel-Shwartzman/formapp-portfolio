@@ -1,3 +1,7 @@
+"""
+This is the main entry point for the application.
+"""
+
 from formapp import create_app
 
 app = create_app(testing=True)
