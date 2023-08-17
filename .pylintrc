@@ -12,3 +12,7 @@ bad-names=i,j,k,ex,Run,_
 
 [IMPORTS]
 init-import=yes
+
+[pylint.'formapp.validators']
+ignore = too-few-public-methods
+
