@@ -1,6 +1,6 @@
 import pytest
-from formapp.models import Flying, Driving
-from formapp.forms import FlyingForm, DriverForm
+from formapp.models import Flying, Driving, Assignment
+from formapp.forms import FlyingForm, DriverForm, AssignTaskForm
 
 
 def test_submit_flying_form(client, registered_user):
@@ -27,6 +27,10 @@ def test_submit_flying_form(client, registered_user):
     assert submitted_flying.start_date == '2023-08-15'
     assert submitted_flying.end_date == '2023-08-20'
     assert submitted_flying.location == 'Some Location'
+    #Check updates
+    form_response = client.post('/home#tab5', follow_redirects=True)
+    assert form_response.status_code == 200
+    assert b'John Doe' in form_response.data
 
 def test_submit_driver_form(client, registered_user, officer_user):
     # Login as the registered user
@@ -49,3 +53,29 @@ def test_submit_driver_form(client, registered_user, officer_user):
     submitted_driver = Driving.query.filter_by(full_name='Jane Smith').first()
     assert submitted_driver is not None
     assert submitted_driver.destination == 'Another Location'
+
+    #Check updates
+    form_response = client.post('/home#tab5', follow_redirects=True)
+    assert form_response.status_code == 200
+    assert b'Jane Smith' in form_response.data
+
+
+def test_assignments(client, registered_user, officer_user):
+    login_response = client.post('/login', data={'username': 'officer', 'password': 'officerpassword'}, follow_redirects=True)
+    assert login_response.status_code == 200 
+    form =  AssignTaskForm()
+    form.user.data = registered_user.id
+    form.task.data = 'Test Task'
+    form.submit.data = True
+
+    form_response = client.post('/home', data=form.data, follow_redirects=True)
+    assert form_response.status_code == 200
+    assert b'Task assigned successfully.' in form_response.data
+
+    submitted_task = Assignment.query.filter_by(task='Test Task').first()
+    assert submitted_task is not None
+
+    #Check updates
+    form_response = client.post('/home#tab5', follow_redirects=True)
+    assert form_response.status_code == 200
+    assert b'Test Task' in form_response.data
