@@ -23,7 +23,7 @@ def create_app(testing=False):
     if testing:
         # Disable CSRF protection during testing
         app.config["WTF_CSRF_ENABLED"] = False
-        app.config["SQLALCHEMY_DATABASE_URI"] = "sqlite:///:memory:"
+        app.config["SQLALCHEMY_DATABASE_URI"] = "sqlite:///test.db"
     else:
         app.config["SQLALCHEMY_DATABASE_URI"] = 'mysql+mysqlconnector://root:root@mysql/db'
         
