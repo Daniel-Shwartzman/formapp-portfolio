@@ -1,6 +1,7 @@
 from formapp.models import Flying, Driving, Assignment
 from formapp.forms import FlyingForm, DriverForm, AssignTaskForm
 
+
 def test_submit_flying_form(client):
     # Login as the registered user
     login_response = client.post(
