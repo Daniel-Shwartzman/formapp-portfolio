@@ -23,7 +23,9 @@
         {% endfor %}
 
         <form action="{{ url_for('formapp.settings') }}" method="post">
+          {% if form.csrf_token is defined %}
           {{ form.csrf_token() }}
+          {% endif %}
           
           <div class="mb-3">
             <div class="input-group">
