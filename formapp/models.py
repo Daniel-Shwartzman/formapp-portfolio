@@ -7,7 +7,7 @@ class User(db.Model, UserMixin):
 
     id = db.Column(db.Integer, primary_key=True, autoincrement=True)
     username = db.Column(db.String(30), unique=True, nullable=False)
-    password = db.Column(db.String(128), nullable=False)
+    password = db.Column(db.String(256), nullable=False)
     isOfficer = db.Column(db.Boolean, default=False, nullable=False)
 
     # Remove the cascade option from the assigned_tasks relationship
