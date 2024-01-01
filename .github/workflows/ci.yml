@@ -69,7 +69,6 @@ jobs:
         echo $DOCKER_ACCESS_TOKEN | docker login -u $DOCKER_USERNAME --password-stdin
         docker build -t $IMAGE_NAME:$TAG .
         docker tag $IMAGE_NAME:$TAG sbendarsky/$IMAGE_NAME:$TAG
-        docker images
         docker push sbendarsky/$IMAGE_NAME:$TAG
 
     - name: Slack Notification
