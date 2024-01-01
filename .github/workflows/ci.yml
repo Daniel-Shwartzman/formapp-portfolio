@@ -2,10 +2,16 @@ name: CI
 
 on:
   push:
-    branches: [ "main", "devops" ]
+    branches: 
+      - main
+      - devops
 
 env:
   SLACK_WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK_URL }}
+  DOCKER_USERNAME: ${{ secrets.DOCKER_USERNAME }}
+  DOCKER_ACCESS_TOKEN: ${{ secrets.DOCKER_ACCESS_TOKEN }}
+  IMAGE_NAME: sbendarsky/formapp-portfolio
+  TAG: latest
 
 jobs:
   CI:
@@ -17,7 +23,8 @@ jobs:
         python-version: ["3.10"]
 
     steps:
-    - uses: act10ns/slack@v2.0.0
+    - name: Notify Slack - Starting CI
+      uses: act10ns/slack@v2.0.0
       with:
         status: starting
         message: Starting CI....
@@ -34,18 +41,13 @@ jobs:
         python -m pip install --upgrade pip
         pip install -r requirements.txt pylint pytest
 
-    - name: Build the Docker compose
+    - name: Build and Test the Docker compose
       id: build
       run: |
         docker-compose build
         docker-compose up -d
         sleep 5
         docker-compose down
-
-    - name: Test with pytest
-      id: pytest
-      run: |
-        sleep 5
         pytest tests/
 
     - name: Analysing the code with pylint
@@ -53,6 +55,21 @@ jobs:
       run: |
         pylint $(git ls-files '*.py')
     
+    - name: Slack Notification
+      uses: act10ns/slack@v2.0.0
+      # send message even if the ci fails
+      if: always()
+      with:
+        status: ${{ job.status }}
+        steps: ${{ toJson(steps) }}
+
+    - name: Publish to Docker Hub
+      id: publish
+      run: |
+        docker login -u $DOCKER_USERNAME -p $DOCKER_ACCESS_TOKEN
+        docker tag $IMAGE_NAME $IMAGE_NAME:$TAG
+        docker push $IMAGE_NAME:$TAG
+        echo "::set-output name=new_tag::$IMAGE_NAME:$TAG"
 
     - name: Slack Notification
       uses: act10ns/slack@v2.0.0
@@ -61,6 +78,10 @@ jobs:
       with:
         status: ${{ job.status }}
         steps: ${{ toJson(steps) }}
+
+    
+
+
 
 
  
