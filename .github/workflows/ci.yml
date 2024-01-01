@@ -10,7 +10,7 @@ env:
   SLACK_WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK_URL }}
   DOCKER_USERNAME: ${{ secrets.DOCKER_USERNAME }}
   DOCKER_ACCESS_TOKEN: ${{ secrets.DOCKER_ACCESS_TOKEN }}
-  IMAGE_NAME: sbendarsky/formapp-portfolio
+  IMAGE_NAME: flask-web
   TAG: latest
 
 jobs:
@@ -63,13 +63,13 @@ jobs:
         status: ${{ job.status }}
         steps: ${{ toJson(steps) }}
 
-    - name: Publish to Docker Hub
-      id: publish
+    - name: Publish Docker Image to DockerHub
+      if: success()
       run: |
-        docker login -u $DOCKER_USERNAME -p $DOCKER_ACCESS_TOKEN
-        docker tag $IMAGE_NAME $IMAGE_NAME:$TAG
+        echo $DOCKER_ACCESS_TOKEN | docker login -u $DOCKER_USERNAME --password-stdin
+        docker build -t $IMAGE_NAME:$TAG .
+        docker images
         docker push $IMAGE_NAME:$TAG
-        echo "::set-output name=new_tag::$IMAGE_NAME:$TAG"
 
     - name: Slack Notification
       uses: act10ns/slack@v2.0.0
