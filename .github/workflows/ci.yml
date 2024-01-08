@@ -63,18 +63,13 @@ jobs:
         status: ${{ job.status }}
         steps: ${{ toJson(steps) }}
 
-    - name: Github Tag Bump
+    - name: Bump version and push tag
       id: tag 
       if: ${{ github.ref == 'refs/heads/main' }}
       uses: anothrNick/github-tag-action@1.67.0
       env:
         GITHUB_TOKEN: ${{ secrets.GH_TOKEN }}
         WITH_V: false
-        DEFAULT_BUMP: patch
-        INITIAL_VERSION: 1.0
-        DEFAULT_BRANCH: main
-      with:
-        dry_run: true
 
     - name: Publish Docker Image to DockerHub
       if: success()
