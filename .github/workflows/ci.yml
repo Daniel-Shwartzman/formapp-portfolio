@@ -63,13 +63,24 @@ jobs:
         status: ${{ job.status }}
         steps: ${{ toJson(steps) }}
 
+    - name: Tag the image and push tag
+      id: tag 
+      if: ${{ github.ref == 'refs/heads/main' }}
+      uses: anotherNick/github-tag-action@v1.61.0
+      env:
+        GITHUB_TOKEN: ${{ secrets.GH_TOKEN }}
+        WITH_V: false
+        DEFAULT_BUMP: patch
+        INITIAL_VERSION: 1.0
+        DEFAULT_BRANCH: main
+
     - name: Publish Docker Image to DockerHub
       if: success()
       run: |
         echo $DOCKER_ACCESS_TOKEN | docker login -u $DOCKER_USERNAME --password-stdin
-        docker build -t $IMAGE_NAME:$TAG .
-        docker tag $IMAGE_NAME:$TAG sbendarsky/$IMAGE_NAME:$TAG
-        docker push sbendarsky/$IMAGE_NAME:$TAG
+        docker build -t $IMAGE_NAME:$(git describe --tags) .
+        docker tag $IMAGE_NAME:$TAG sbendarsky/$IMAGE_NAME:$(git describe --tags)
+        docker push sbendarsky/$IMAGE_NAME:$(git describe --tags)
 
     - name: Slack Notification
       uses: act10ns/slack@v2.0.0
