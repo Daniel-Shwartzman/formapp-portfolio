@@ -1,0 +1,423 @@
+/* Set base styles for the page */
+body, html {
+  height: 100%;
+  margin: 0;
+  font-family: Arial, sans-serif;
+  position: relative; /* Add this to make the ::before pseudo-element relative to the body */
+}
+
+/* Background styles */
+.background-image {
+  content: "";
+  background-image: url('https://github.com/sbendarsky/Forms-App/blob/main/media/forms-wallpaper.jpg?raw=true');
+  background-size: cover;
+  background-position: center;
+  position: absolute; /* Position the pseudo-element to cover the whole body */
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  z-index: -1;
+  opacity: 0.9;
+  filter: blur(5px); /* Adjust the blur value as needed */
+}
+
+/* Add CSS styles for the static cog icon in the top right corner */
+.static-settings-btn {
+  position: absolute;
+  top: 3px;
+  right: 10px;
+  font-size: 30px;
+  color: #333;
+  text-decoration: none;
+  z-index: 100;
+}
+
+/* Add CSS styles for the hoverable cog icon */
+.settings-btn {
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  font-size: 24px;
+  color: #333;
+  text-decoration: none;
+  z-index: 100;
+}
+
+.settings-btn:hover {
+  opacity: 0.5; /* Adjust the opacity to your liking */
+}
+
+/* Center the form vertically and horizontally */
+.center-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100vh; /* Change to occupy full viewport height */
+}
+
+
+.form {
+  background-color: #f9f9f9; /* Change to a light background color */
+  padding: 30px;
+  border-radius: 8px;
+  box-shadow: 0 0 20px rgba(0, 0, 0, 0.4);
+  max-width: 400px;
+  width: 90%;
+}
+
+/* Styling for the form fields */
+.form-control {
+  padding: 12px;
+  margin-bottom: 20px;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  width: 100%; /* Make the form fields take up the full width of the container */
+  background-color: #f9f9f9; /* Set a light gray background for the form fields */
+  color: #333;
+}
+
+
+/* Placeholder text color */
+.form-control::placeholder {
+  color: #888; /* Set a slightly lighter color for placeholder text */
+}
+
+.form-check-label {
+  margin-left: 5px;
+  margin-top: 5px;
+}
+
+.form-label {
+  margin-left: 5px;
+}
+
+
+/* Styling for the heading */
+h2 {
+  text-align: center;
+  margin-bottom: 20px;
+  color: #333;
+}
+
+/* Styling for the form elements */
+form {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+/* Styling for input fields */
+input {
+  padding: 12px;
+  margin-bottom: 20px;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  width: 100%; /* Make the input fields take up the full width of the container */
+  max-width: 400px; /* Limit the maximum width of the input fields */
+  background-color: #f9f9f9; /* Set a light gray background for the input fields */
+  color: #333;
+}
+
+/* Placeholder text color */
+input::placeholder {
+  color: #888; /* Set a slightly lighter color for placeholder text */
+}
+
+/* Button styles */
+.button {
+  padding: 12px 0;
+  background-color: #007BFF;
+  color: #fff;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  width: 100%;
+  transition: background-color 0.2s;
+  text-align: center;
+}
+
+/* Button styles on hover */
+.button:hover {
+  background-color: #0056b3;
+}
+
+/* Styling for the paragraph text */
+p {
+  text-align: center;
+  margin-top: 15px;
+  color: #333;
+}
+
+
+/* Styling for links */
+a {
+  color: #0090b4;
+  text-decoration: none;
+  text-align: center;
+}
+
+.feedback {
+  text-align: center;
+  margin-top: 15px;
+  color: #850000;
+}
+
+.feedback:hover {
+  color: #750000;
+}
+
+a:hover {
+  color: #005e75;
+}
+
+/* Additional styling for links inside a button */
+a.button {
+  padding: 12px 0;
+}
+
+/* Styling for the copyright section */
+.hero {
+  background-color: #424242;
+  padding: 5px;
+}
+
+.bot-text {
+  color: #fff;
+  text-align: center;
+}
+
+/* Social icons styles */
+.hero .icon {
+  margin: 5px;
+  font-size: 20px;
+}
+
+.logo-container {
+  text-align: center;
+  margin-bottom: 20px;
+  padding: 20px; /* Add some padding around the logo */
+}
+
+.logo-container img {
+  max-width: 200px; /* Increased logo size for better visibility */
+}
+
+/* Centering text in the copyright section */
+.hero .content {
+  display: flex;
+  justify-content: center;
+}
+
+/* Tabs styles */
+.tabs {
+  display: flex;
+  overflow: hidden;
+  size: 50px;
+  background-color: #f1f1f1; /* Lighten the background color of tabs */
+  border-bottom: 1px solid #ddd; /* Add a subtle border at the bottom of tabs */
+  border-top-left-radius: 8px; /* Match the dashboard's border radius */
+  border-top-right-radius: 8px;
+}
+
+
+.tablink {
+  flex: 1;
+  border: none;
+  background-color: transparent; /* Transparent background for a cleaner look */
+  padding: 15px;
+  cursor: pointer;
+  text-align: center;
+  transition: background-color 0.3s ease;
+  font-size: 16px; /* Increase font size for better readability */
+  font-weight: bold; /* Bold font for better contrast */
+  color: #555; /* Darken the text color slightly */
+}
+
+.tablink:hover {
+  background-color: #ddd; /* Lighten the hover background color */
+}
+
+.tablink.active {
+  background-color: #f9f9f9; /* Match the background color of the dashboard */
+  border-top: 2px solid #007BFF; /* Add a subtle highlight border on active tab */
+  color: #007BFF; /* Highlight the active tab text color */
+}
+
+.tabcontent-container {
+  padding: 20px;
+}
+
+.tabcontent {
+  display: none;
+  max-height: 100%;
+  max-height: 400px; 
+  overflow: hidden;
+}
+
+.tabcontent h2 {
+  margin-top: 0;
+  color: #333;
+}
+
+.tabcontent p {
+  color: #666;
+}
+
+.radio-group {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin-bottom: 20px;
+  font-weight: bold;
+}
+
+.radio-group label {
+  margin: 0 20px; /* Add spacing between radio button and label */
+  cursor: pointer;
+}
+
+.radio-group input[type="radio"] {
+  display: none; /* Hide the default radio button */
+}
+
+.radio-group span {
+  display: inline-block;
+  width: 20px;
+  height: 20px;
+  border: 2px solid #007BFF; /* Set border color for the radio button */
+  border-radius: 50%; /* Make the border circular */
+  position: relative;
+}
+
+.radio-group span:after {
+  content: "";
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%) scale(0); /* Hide the inner dot by scaling it to 0 */
+  width: 12px;
+  height: 12px;
+  border-radius: 50%;
+  background-color: #007BFF; /* Set the inner dot color */
+  transition: transform 0.2s ease; /* Add a smooth animation on radio button selection */
+}
+
+.radio-group input[type="radio"]:checked + span:after {
+  transform: translate(-50%, -50%) scale(1); /* Show the inner dot when radio button is selected */
+}
+
+.radio-group label {
+  display: flex;
+  align-items: center;
+  margin: 0 20px; /* Add spacing between radio button and label */
+  cursor: pointer;
+}
+
+.radio-text {
+  color: #333; /* Set the text color */
+}
+
+.dashboard {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  max-width: 725px; /* You can adjust the max-width to your desired value */
+  width: 100%;
+  padding: 20px;
+  background-color: rgba(255, 255, 255, 0.8); /* Add a transparent background */
+  border-radius: 10px;
+}
+
+.fade-out {
+  animation: fadeOut 0.3s forwards;
+}
+
+@keyframes fadeOut {
+  to {
+      opacity: 0;
+      display: none;
+  }
+}
+
+.tablink.logout-btn {
+  background-color: #db5050; /* Match the background color of the dashboard */
+}
+
+.tablink.logout-btn:hover{
+  background-color: #c01717; /* Lighten the hover background color */
+}
+
+#tab6 .shadow.rounded-circle {
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  border-radius: 50%;
+  transition: box-shadow 0.3s ease;
+}
+
+/* Add the hover effect for images in the "Meet us!" tab */
+#tab6 .shadow.rounded-circle:hover {
+  box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
+}
+
+.connector {
+  border-right: 2px solid #ccc;
+  height: 100px; /* Adjust the height as needed */
+  margin-top: 30px; /* Adjust the margin as needed */
+}
+
+.error-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  height: 100vh;
+  background-color: #f8f9fa;
+}
+
+.error-container h1 {
+  font-size: 3rem;
+  margin-bottom: 1rem;
+}
+
+.error-container p {
+  font-size: 1.2rem;
+  text-align: center;
+  margin-bottom: 1.5rem;
+}
+
+.error-container a {
+  display: inline-block;
+  padding: 0.5rem 1.5rem;
+  background-color: #007bff;
+  color: #fff;
+  text-decoration: none;
+  border-radius: 5px;
+  font-size: 1.2rem;
+  transition: background-color 0.3s ease;
+}
+
+.error-container a:hover {
+  background-color: #0056b3;
+}
+
+@media (max-width: 768px) {
+  .error-container {
+    padding: 2rem;
+  }
+}
+
+/* Add this to your CSS file */
+.scrollable-updates {
+  max-height: 400px; /* Adjust the height as needed */
+  overflow-y: auto;
+  padding-right: 10px; /* Add right padding to prevent content from overlapping scrollbar */
+}
+
+/* Style for individual flying cards */
+.card {
+  margin-bottom: 10px;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  border: 1px solid rgba(0, 0, 0, 0.125);
+  border-radius: 0.25rem;
+}
