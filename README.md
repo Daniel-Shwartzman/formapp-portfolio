@@ -27,7 +27,7 @@ In the production environment, we've deployed ArgoCD on an AWS EKS cluster, upon
 * [MySQL](https://dev.mysql.com/doc/)
 * [Bitnami-Charts](https://github.com/bitnami/charts)
 * [Terraform](https://www.terraform.io/docs)
-* [AWS]([https://cloud.google.com/docs](https://docs.aws.amazon.com/))
+* [AWS](https://docs.aws.amazon.com/)
 * [ArgoCD](https://argo-cd.readthedocs.io/en/stable/)
 * [GitHub Actions](https://docs.github.com/en/actions)
 
