@@ -1,4 +1,4 @@
-name: CI
+name: CI / CD
 
 on:
   push:
@@ -96,15 +96,14 @@ jobs:
     env:
         SLACK_WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK_UR }}
     steps:
-    - uses: actions/checkout@v3
+    - uses: actions/checkout@v4
     - name: clone the gitops repo
       id: clone-the-gitops-repo
       if: ${{ github.ref == 'refs/heads/main'}}
-      uses: actions/checkout@v3
+      uses: actions/checkout@v4
       with:
-        repository: sbendarsky/manifest-repo
-        token: ${{ secrets.GH_TOKEN }}
-        ref: main
+        repository: sbendarsky/manifest-formapp
+        path: manifest-formapp
 
     - name: do some gitops
       id: update-the-gitops-repo
