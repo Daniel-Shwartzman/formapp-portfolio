@@ -89,6 +89,44 @@ jobs:
         status: ${{ job.status }}
         steps: ${{ toJson(steps) }}
 
+
+  CD:
+    needs: [CI]
+    runs-on: ubuntu-latest
+    env:
+        SLACK_WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK_UR }}
+    steps:
+    - uses: actions/checkout@v3
+    - name: clone the gitops repo
+      id: clone-the-gitops-repo
+      if: ${{ github.ref == 'refs/heads/main'}}
+      uses: actions/checkout@v3
+      with:
+        repository: sbendarsky/manifest-repo
+        token: ${{ secrets.GH_TOKEN }}
+        ref: main
+
+    - name: do some gitops
+      id: update-the-gitops-repo
+      if: ${{ github.ref == 'refs/heads/main'}}
+      run: |
+        tag="${{ needs.CI.outputs.new_tag }}"
+        cd helm-charts/app
+        sed -i "s/tag:.*/tag: $tag/" values.yaml
+        git config --global user.email "ghactions@gmail.com"
+        git config --global user.name "github actions"
+        git add values.yaml
+        git commit -m "update the image tag to $tag"
+        git push origin main
+
+    - name: Slack Notification
+      uses: act10ns/slack@v2.0.0
+      # send message even if the ci fails
+      if: always()
+      with:
+        status: ${{ job.status }}
+        steps: ${{ toJson(steps) }}
+
     
 
 
