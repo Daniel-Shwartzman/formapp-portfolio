@@ -114,7 +114,7 @@ jobs:
           ls manifest-formapp/helm-charts/app  # Debug: Check if the directory exists
           cd manifest-formapp/helm-charts/app
           sed -i "s/tag:.*/tag: $tag/" values.yaml
-          git config --global user.email "ghactions@gmail.com"
+          git config --global user.email "dshwartzman5@gmail.com"
           git config --global user.name "github actions"
           git add values.yaml
           git commit -m "update the image tag to $tag"
