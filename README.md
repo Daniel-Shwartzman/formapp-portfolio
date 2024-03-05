@@ -1,7 +1,7 @@
 # FormApp - DevOps Protfolio
 This DevOps portfolio serves as a comprehensive demonstration of our academic journey, showcasing a variety of methodologies and skills that we've learnt during our studies.
 
-[![CI](https://github.com/sbendarsky/flask/actions/workflows/ci.yml/badge.svg?branch=main)](https://github.com/sbendarsky/flask/actions/workflows/ci.yml)
+[![CI / CD](https://github.com/sbendarsky/formapp-portfolio/actions/workflows/cicd.yml/badge.svg)](https://github.com/sbendarsky/formapp-portfolio/actions/workflows/cicd.yml)
 
 ## Technical Overview
 Our project kicks off with the development of the web application with Python, using the Flask library. To enhance deployment effciency and shareabillity, we encapsulated the application within Docker containers.
@@ -18,6 +18,20 @@ In the production environment, we've deployed ArgoCD on an AWS EKS cluster, upon
 ### Repositories
 * [Source Code](https://github.com/sbendarsky/formapp-portfolio)
 * [manifest-repo](https://github.com/sbendarsky/manifet-formapp)
+
+## Additional Resources
+1. Project Architecture: Explore our project's structure and functionalities.
+2. Grafana Dashboard: Visualize data and monitor key metrics.
+3. ArgoCD: Manage and deploy applications efficiently.
+
+### Project Architecture
+![Project Architecture](resources/diagram-formapp.png)<br>
+
+### Grafana Dashboard
+![Grafana Dashboard](resources/grafana-formapp.png)<br>
+
+### ArgoCD Dashboard
+![ArgoCD Dashboard](resources/argocd-formapp.png)<br>
 
 ## Documentation Sources
 * [Docker & Docker-Compose](https://docs.docker.com/)
