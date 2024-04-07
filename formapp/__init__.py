@@ -26,7 +26,6 @@ def create_app(testing=False):
         app.config["SQLALCHEMY_DATABASE_URI"] = 'mysql+mysqlconnector://root:root@mysql/db'
 
     app.config["SQLALCHEMY_TRACK_MODIFICATIONS"] = False
-    app.config["SQLALCHEMY_TRACK_MODIFICATIONS"] = False
     # config application extension.
     config_extensions(app)
     # register account blueprint.
